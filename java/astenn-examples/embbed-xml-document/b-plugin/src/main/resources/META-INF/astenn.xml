@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<astenn>
+
+    <plugin-interface class-name="org.lestr.astenn.examples.embbedXMLDocument.application.IPlugin">
+        <plugin-implementation address="local:org.lestr.astenn.examples.embbedXMLDocument.bPlugin.BPlugin" />
+    </plugin-interface>
+
+</astenn>
