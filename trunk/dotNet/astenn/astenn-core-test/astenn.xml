@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<astenn>
+
+  <plugin-interface class-name="Org.Lestr.Astenn.Test.IPlugin, Org.Lestr.Astenn.Core.Test, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <plugin-implementation address="local:Org.Lestr.Astenn.Test.Plugin1, Org.Lestr.Astenn.Core.Test, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <plugin-implementation address="local:Org.Lestr.Astenn.Test.Plugin2, Org.Lestr.Astenn.Core.Test, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+  </plugin-interface>
+
+</astenn>
