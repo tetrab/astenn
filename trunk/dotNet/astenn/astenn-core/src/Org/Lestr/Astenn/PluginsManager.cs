@@ -76,19 +76,27 @@ namespace Org.Lestr.Astenn
         public void RegisterPlugin(Type pluginInterfaceClass, string pluginImplementationAddress)
         {
 
-            if (!Configuration.PersistenceDriver.ExistPluginInterface(pluginInterfaceClass.AssemblyQualifiedName))
-                Configuration.PersistenceDriver.AddPluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
+            RegisterPlugin(pluginInterfaceClass, pluginImplementationAddress, Configuration.PersistenceDriver);
 
-            if (!Configuration.PersistenceDriver.ExistPluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress))
+        }// END Method RegisterPlugin
+
+
+        public void RegisterPlugin(Type pluginInterfaceClass, string pluginImplementationAddress, IPersistenceDriver persistenceDriver)
+        {
+
+            if (!persistenceDriver.ExistPluginInterface(pluginInterfaceClass.AssemblyQualifiedName))
+                persistenceDriver.AddPluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
+
+            if (!persistenceDriver.ExistPluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress))
             {
 
-                Configuration.PersistenceDriver.AddPluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress);
+                persistenceDriver.AddPluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress);
 
                 if (Configuration.PermissionsManager.AutoExposeLocalPlugins)
                     Configuration.PermissionsManager.RescanAutoExposedLocalPlugins();
 
             }
-                
+
         }// END Method RegisterPlugin
 
 
@@ -122,14 +130,22 @@ namespace Org.Lestr.Astenn
         public void UnregisterPlugin(Type pluginInterfaceClass, string pluginImplementationAddress)
         {
 
-            if (Configuration.PersistenceDriver.ExistPluginInterface(pluginInterfaceClass.AssemblyQualifiedName) &&
-               Configuration.PersistenceDriver.ExistPluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress))
+            UnregisterPlugin(pluginInterfaceClass, pluginImplementationAddress, Configuration.PersistenceDriver);
+            
+        }// END Method UnregisterPlugin
+
+
+        public void UnregisterPlugin(Type pluginInterfaceClass, string pluginImplementationAddress, IPersistenceDriver persistenceDriver)
+        {
+
+            if (persistenceDriver.ExistPluginInterface(pluginInterfaceClass.AssemblyQualifiedName) &&
+               persistenceDriver.ExistPluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress))
             {
 
-                Configuration.PersistenceDriver.RemovePluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress);
+                persistenceDriver.RemovePluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress);
 
-                if (!Configuration.PersistenceDriver.GetPluginImplementationsAddresses(pluginInterfaceClass.AssemblyQualifiedName).GetEnumerator().MoveNext())
-                    Configuration.PersistenceDriver.RemovePluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
+                if (!persistenceDriver.GetPluginImplementationsAddresses(pluginInterfaceClass.AssemblyQualifiedName).GetEnumerator().MoveNext())
+                    persistenceDriver.RemovePluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
 
             }
 
