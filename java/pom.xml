@@ -51,8 +51,6 @@
         <module>astenn-tools</module>
         <module>astenn-cxf</module>
         <module>astenn-rmi</module>
-        <module>astenn-ars</module>
-        <module>astenn-aro</module>
         <module>astenn-liferay</module>
     </modules>
 
