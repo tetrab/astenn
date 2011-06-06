@@ -18,9 +18,6 @@ namespace Org.Lestr.Astenn.Configuration
         IPermissionsManager PermissionsManager { get; }
 
 
-        List<IPluginsProvider> PluginsProviders { get; }
-
-
     }// END Interface IConfiguration
 
 
