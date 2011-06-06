@@ -49,10 +49,14 @@ namespace Org.Lestr.Astenn
         private IConfiguration configuration;
 
 
+        private IPluginsProvider localPluginsProvider;
+
+
         private PluginsManager()
         {
 
             configuration = new ConfigurationImpl();
+            localPluginsProvider = new LocalPluginsProvider();
 
         }// END Constructor
 
@@ -173,28 +177,68 @@ namespace Org.Lestr.Astenn
 
             List<PluginInterfaceType> rslt = new List<PluginInterfaceType>();
 
-            if (Configuration.PersistenceDriver.ExistPluginInterface(typeof(PluginInterfaceType).AssemblyQualifiedName))
-                foreach (string pluginImplementationAddress in Configuration.PersistenceDriver.GetPluginImplementationsAddresses(typeof(PluginInterfaceType).AssemblyQualifiedName))
-                {
+            lock (this) {
 
-                    try
-                    {
+                if (typeof(PluginInterfaceType) != typeof(IPluginsProvider))
+                    foreach (IPluginsProvider pluginsProvider in GetRegisteredLocalPlugins<IPluginsProvider>())
+                        foreach (PluginInterfaceType plugin in GetRegisteredPlugins<PluginInterfaceType>(pluginsProvider))
+                            rslt.Add(plugin);
 
-                        foreach (IPluginsProvider provider in configuration.PluginsProviders)
-                            if (pluginImplementationAddress.StartsWith(provider.Scheme + ":"))
-                            {
-                                rslt.Add(provider.GetPlugin<PluginInterfaceType>(pluginImplementationAddress));
-                                break;
-                            }
+                foreach (PluginInterfaceType plugin in GetRegisteredPlugins<PluginInterfaceType>(localPluginsProvider))
+                    rslt.Add(plugin);
 
-                    }
-                    catch (System.Exception) { }
-
-                }
+            }
 
             return rslt;
 
         }// END Method GetRegisteredPlugins
+
+
+        public IEnumerable<PluginInterfaceType> GetRegisteredPlugins<PluginInterfaceType>(IPluginsProvider pluginsProvider)
+        {
+
+            List<PluginInterfaceType> rslt = new List<PluginInterfaceType>();
+
+            lock (this) {
+
+                List<string> pluginImplementationAddresses = new List<string>();
+
+                if (Configuration.PersistenceDriver.ExistPluginInterface(typeof(PluginInterfaceType).AssemblyQualifiedName))
+                    foreach (String pluginImplementationAddress in Configuration.PersistenceDriver.GetPluginImplementationsAddresses(typeof(PluginInterfaceType).AssemblyQualifiedName))
+                        pluginImplementationAddresses.Add(pluginImplementationAddress);
+
+                foreach (string pluginImplementationAddress in pluginImplementationAddresses)
+                    if (pluginImplementationAddress.StartsWith(pluginsProvider.Scheme + ":"))
+                        rslt.Add(pluginsProvider.GetPlugin<PluginInterfaceType>(pluginImplementationAddress));
+
+            }
+
+            return rslt;
+
+        }// END Method GetRegisteredPlugins
+
+
+        public IEnumerable<PluginInterfaceType> GetRegisteredLocalPlugins<PluginInterfaceType>()
+        {
+
+            return GetRegisteredPlugins<PluginInterfaceType>(localPluginsProvider);
+
+        }// END Method GetRegisteredLocalPlugins
+
+        
+        public IEnumerable<PluginInterfaceType> GetRegisteredRemotePlugins<PluginInterfaceType>() {
+
+            List<PluginInterfaceType> rslt = new List<PluginInterfaceType>();
+
+            if (typeof(PluginInterfaceType) != typeof(IPluginsProvider))
+                foreach (IPluginsProvider pluginsProvider in GetRegisteredPlugins<IPluginsProvider>(localPluginsProvider))
+                    if (!(pluginsProvider is LocalPluginsProvider))
+                        foreach (PluginInterfaceType plugin in GetRegisteredPlugins<PluginInterfaceType>(pluginsProvider))
+                            rslt.Add(plugin);
+
+            return rslt;
+
+        }// END Method GetRegisteredRemotePlugins
 
 
         public PluginInterfaceType GetRegisteredSingletonPlugin<PluginInterfaceType>()
@@ -211,7 +255,6 @@ namespace Org.Lestr.Astenn
         {
 
 
-            private List<IPluginsProvider> pluginsProviders;
             private CompositePersistenceDriver persistenceDriver;
             IPermissionsManager permissionsManager;
 
@@ -221,10 +264,6 @@ namespace Org.Lestr.Astenn
 
                 persistenceDriver = new CompositePersistenceDriver(new RAMPersistenceDriver(), new List<IPersistenceDriver>());
                 permissionsManager = new PermissionsManagerImpl();
-                
-                pluginsProviders = new List<IPluginsProvider>();
-
-                pluginsProviders.Add(new LocalPluginsProvider());
 
             }// END Constructor
 
@@ -243,14 +282,6 @@ namespace Org.Lestr.Astenn
                 get { return permissionsManager; }
 
             }// END Property PermissionsManager
-
-
-            public List<IPluginsProvider> PluginsProviders
-            {
-
-                get { return pluginsProviders; }
-
-            }// END Property PersistenceDriver
 
 
         }// END Class ConfigurationImpl 
