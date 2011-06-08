@@ -123,6 +123,16 @@ namespace Org.Lestr.Astenn
         }// END Method RegisterPlugin
 
 
+        public void RegisterSingletonPlugin(Type pluginInterfaceClass, string pluginImplementationAddress, IPersistenceDriver persistenceDriver)
+        {
+
+            UnregisterSingletonPlugin(pluginInterfaceClass);
+
+            RegisterPlugin(pluginInterfaceClass, pluginImplementationAddress, persistenceDriver);
+            
+        }// END Method RegistreSingletonPlugin
+
+
         public void UnregisterPlugin(Type pluginInterfaceClass, Type pluginImplementationClass)
         {
 
@@ -264,6 +274,8 @@ namespace Org.Lestr.Astenn
 
                 persistenceDriver = new CompositePersistenceDriver(new RAMPersistenceDriver(), new List<IPersistenceDriver>());
                 permissionsManager = new PermissionsManagerImpl();
+
+                persistenceDriver.ReadOnlyPersistenceDrivers.Add(new EmbbedXMLDocumentPersistenceDriver());
 
             }// END Constructor
 
