@@ -104,12 +104,14 @@ namespace Org.Lestr.Astenn.Configuration
 
         public bool ExistPluginImplementation(string pluginInterfaceName, string pluginImplementationAddress)
         {
-	
-	        if(readWritePersistenceDriver.ExistPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
+
+            if (readWritePersistenceDriver.ExistPluginInterface(pluginInterfaceName)
+                && readWritePersistenceDriver.ExistPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
 	            return true;
 	
 	        foreach(IPersistenceDriver driver in readOnlyPersistenceDrivers)
-	            if(driver.ExistPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
+	            if(driver.ExistPluginInterface(pluginInterfaceName)
+                    && driver.ExistPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
 	                return true;
 	        
 	        return false;
@@ -139,13 +141,15 @@ namespace Org.Lestr.Astenn.Configuration
 
             List<string> rslt = new List<string>();
 
-            foreach (string implementation in readWritePersistenceDriver.GetPluginImplementationsAddresses(pluginInterfaceName))
-	            rslt.Add(implementation);
+            if (readWritePersistenceDriver.ExistPluginInterface(pluginInterfaceName))
+                foreach (string implementation in readWritePersistenceDriver.GetPluginImplementationsAddresses(pluginInterfaceName))
+	                rslt.Add(implementation);
 	
 	        foreach(IPersistenceDriver driver in readOnlyPersistenceDrivers)
-                foreach (string implementation in driver.GetPluginImplementationsAddresses(pluginInterfaceName))
-	                if(!rslt.Contains(implementation))
-	                    rslt.Add(implementation);
+                if (driver.ExistPluginInterface(pluginInterfaceName))
+                    foreach (string implementation in driver.GetPluginImplementationsAddresses(pluginInterfaceName))
+	                    if(!rslt.Contains(implementation))
+	                        rslt.Add(implementation);
 	
 	        return rslt;
 	

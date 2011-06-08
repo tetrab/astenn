@@ -26,8 +26,7 @@ namespace Org.Lestr.Astenn.Configuration
 	
 	    public EmbbedXMLDocumentPersistenceDriver()
 	    {
-
-	        cachedPersistenceDriver = new CompositePersistenceDriver();
+            cachedPersistenceDriver = new CompositePersistenceDriver();
             
             foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 foreach(string resourceName in assembly.GetManifestResourceNames())
