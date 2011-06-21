@@ -104,6 +104,14 @@ namespace Org.Lestr.Astenn
         }// END Method RegisterPlugin
 
 
+        public void RegisterPlugin(Type pluginInterfaceClass, Type pluginImplementationClass, IPersistenceDriver persistenceDriver)
+        {
+
+            RegisterSingletonPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName, persistenceDriver);
+
+        }// END Method RegisterPlugin
+
+
         public void RegisterSingletonPlugin(Type pluginInterfaceClass, Type pluginImplementationClass)
         {
 
@@ -129,7 +137,17 @@ namespace Org.Lestr.Astenn
             UnregisterSingletonPlugin(pluginInterfaceClass);
 
             RegisterPlugin(pluginInterfaceClass, pluginImplementationAddress, persistenceDriver);
-            
+
+        }// END Method RegistreSingletonPlugin
+
+
+        public void RegisterSingletonPlugin(Type pluginInterfaceClass, Type pluginImplementationClass, IPersistenceDriver persistenceDriver)
+        {
+
+            UnregisterSingletonPlugin(pluginInterfaceClass);
+
+            RegisterPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName, persistenceDriver);
+
         }// END Method RegistreSingletonPlugin
 
 
@@ -162,6 +180,14 @@ namespace Org.Lestr.Astenn
                     persistenceDriver.RemovePluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
 
             }
+
+        }// END Method UnregisterPlugin
+
+
+        public void UnregisterPlugin(Type pluginInterfaceClass, Type pluginImplementationClass, IPersistenceDriver persistenceDriver)
+        {
+
+            UnregisterPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName, persistenceDriver);
 
         }// END Method UnregisterPlugin
 
