@@ -104,4 +104,7 @@
   <ItemGroup>
     <None Include="Signature.snk" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>"$(ProjectDir)gacutil.exe" /i "$(TargetDir)$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

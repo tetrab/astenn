@@ -2,11 +2,11 @@
 <astenn>
 
   <plugin-interface class-name="Org.Lestr.Astenn.plugin.IPluginsProvider, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21ff90bd19b14198">
-    <plugin-implementation address="local:Org.Lestr.Astenn.DotNetRemoting.DotNetRemotingPluginsProvider, Org.Lestr.Astenn.DotNetRemoting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <plugin-implementation address="local:Org.Lestr.Astenn.DotNetRemoting.DotNetRemotingPluginsProvider, Org.Lestr.Astenn.DotNetRemoting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=51e459a38300f61a" />
   </plugin-interface>
 
   <plugin-interface class-name="Org.Lestr.Astenn.IServer, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21ff90bd19b14198">
-    <plugin-implementation address="local:Org.Lestr.Astenn.DotNetRemoting.DotNetRemotingServer, Org.Lestr.Astenn.DotNetRemoting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <plugin-implementation address="local:Org.Lestr.Astenn.DotNetRemoting.DotNetRemotingServer, Org.Lestr.Astenn.DotNetRemoting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=51e459a38300f61a" />
   </plugin-interface>
 
 </astenn>
