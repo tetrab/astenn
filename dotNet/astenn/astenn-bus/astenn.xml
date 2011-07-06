@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <astenn>
 
-  <plugin-interface class-name="Org.Lestr.Astenn.Plugin.IAstennFirstUseListener, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+  <plugin-interface class-name="Org.Lestr.Astenn.Plugin.IAstennFirstUseListener, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21ff90bd19b14198">
     <plugin-implementation address="local:Org.Lestr.Astenn.Bus.Impl.AstennFirstUseListener, Org.Lestr.Astenn.Bus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </plugin-interface>
 
-  <plugin-interface class-name="Org.Lestr.Astenn.Bus.Impl.IBusEndpoint, Org.Lestr.Astenn.Core.Bus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+  <plugin-interface class-name="Org.Lestr.Astenn.Bus.Impl.IBusEndpoint, Org.Lestr.Astenn.Core.Bus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21ff90bd19b14198">
     <plugin-implementation address="local:Org.Lestr.Astenn.Bus.Impl.DefaultBusEndpoint, Org.Lestr.Astenn.Core.Bus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </plugin-interface>
 
