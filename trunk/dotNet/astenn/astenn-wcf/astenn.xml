@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<astenn>
+
+  <plugin-interface class-name="Org.Lestr.Astenn.plugin.IPluginsProvider, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <plugin-implementation address="local:Org.Lestr.Astenn.WCF.SOAPPluginsProvider, Org.Lestr.Astenn.WCF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+  </plugin-interface>
+
+  <plugin-interface class-name="Org.Lestr.Astenn.IServer, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <plugin-implementation address="local:Org.Lestr.Astenn.WCF.SOAPServer, Org.Lestr.Astenn.WCF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+  </plugin-interface>
+
+</astenn>

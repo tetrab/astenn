@@ -54,9 +54,9 @@
     <Compile Include="src\Org\Lestr\Astenn\Bus\Impl\IBusEndpoint.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="astenn.xml">
+    <EmbeddedResource Include="astenn.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\astenn-core\astenn-core.csproj">
