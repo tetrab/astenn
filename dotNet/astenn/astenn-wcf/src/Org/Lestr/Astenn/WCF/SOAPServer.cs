@@ -33,7 +33,8 @@ namespace Org.Lestr.Astenn.WCF
         public SOAPServer()
         {
             
-            port = 1069;
+            port = 8080;
+            host = "127.0.0.1";
             listener = new PermissionManagerListenerImpl(this);
             exposed = new Dictionary<string, ServiceHost>();
 
