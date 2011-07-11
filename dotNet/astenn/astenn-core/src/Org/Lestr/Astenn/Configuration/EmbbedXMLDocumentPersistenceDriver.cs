@@ -26,24 +26,39 @@ namespace Org.Lestr.Astenn.Configuration
 	
 	    public EmbbedXMLDocumentPersistenceDriver()
 	    {
+
             cachedPersistenceDriver = new CompositePersistenceDriver();
             
             foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                foreach(string resourceName in assembly.GetManifestResourceNames())
-                if(resourceName.EndsWith(".astenn.xml"))
+                try
                 {
-                
-                    Stream s = assembly.GetManifestResourceStream(resourceName);
+                    foreach (string resourceName in assembly.GetManifestResourceNames())
+                        try
+                        {
+                            if (resourceName.EndsWith(".astenn.xml"))
+                            {
 
-                    byte[] data = new byte[s.Length];
-                    s.Read(data, 0, data.Length);
-                    s.Close();
+                                Stream s = assembly.GetManifestResourceStream(resourceName);
 
-                    XmlDocument document = new XmlDocument();
-                    document.LoadXml(Encoding.Default.GetString(data));
+                                byte[] data = new byte[s.Length];
+                                s.Read(data, 0, data.Length);
+                                s.Close();
 
-                    cachedPersistenceDriver.ReadOnlyPersistenceDrivers.Add(new XMLDocumentPersistenceDriver(document));
+                                XmlDocument document = new XmlDocument();
+                                document.LoadXml(Encoding.Default.GetString(data));
 
+                                cachedPersistenceDriver.ReadOnlyPersistenceDrivers.Add(new XMLDocumentPersistenceDriver(document));
+
+                            }
+                        }
+                        catch (System.Exception ex)
+                        {
+                            Console.Error.WriteLine(ex.Message);
+                            Console.Error.WriteLine(ex.StackTrace);
+                        }
+                }
+                catch (System.Exception)
+                {
                 }
 	
 	    }// END Constructor
