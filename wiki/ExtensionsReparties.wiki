@@ -2,7 +2,7 @@
 
 Astenn vous permet de faire appel, depuis vos programmes, à des extensions hébergées localement et/ou dans une autre JVM. Les protocoles de communications actuellement supportés sont :
 
-  * [SOAP SOAP] (en Java, utilisation de la librairie CXF)
+  * [SOAP SOAP] (en Java, utilisation de la librairie CXF. En .NET, utilisation de WCF)
   * [RMI RMI]
   * .NET Remoting
 
