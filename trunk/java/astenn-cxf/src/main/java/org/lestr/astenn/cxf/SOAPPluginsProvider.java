@@ -63,8 +63,12 @@ public class SOAPPluginsProvider implements IPluginsProvider {
 
                 HTTPConduit conduit = (HTTPConduit) ClientProxy.getClient(proxies.get(pluginInterfaceType)).getConduit();
 
-                if (conduit.getClient() == null)
-                    conduit.setClient(new HTTPClientPolicy());
+                if (conduit.getClient() == null){
+                    HTTPClientPolicy police = new HTTPClientPolicy();
+                    police.setConnectionTimeout(36000);
+                    police.setAllowChunking(false);
+                    conduit.setClient(police);
+                }
 
                 Map<String, String> cookies = (Map<String, String>) PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().get("COOKIES");
 

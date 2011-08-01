@@ -134,8 +134,12 @@ public class DefaultBusEndpoint extends UnicastRemoteObject implements IBusEndpo
                 if (!knowBusEndpointsAddresses.containsKey(busId))
                     knowBusEndpointsAddresses.put(busId, new ArrayList<String>());
 
-                if (!knowBusEndpointsAddresses.get(busId).contains(address))
+                if (!knowBusEndpointsAddresses.get(busId).contains(address)) {
+                    
                     knowBusEndpointsAddresses.get(busId).add(address);
+                    PluginsManager.getSingleton().registerPlugin(IBusEndpoint.class, address);
+                    
+                }
 
             }
 
