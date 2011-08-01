@@ -53,7 +53,7 @@ class BusPersistenceDriver implements IPersistenceDriver {
                     try {
                         if ((pluginImplementationsAddresses = busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)) != null && pluginImplementationsAddresses.length > 0)
                             return true;
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
@@ -82,7 +82,7 @@ class BusPersistenceDriver implements IPersistenceDriver {
                     try {
                         if (Arrays.asList(busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)).contains(pluginImplementationAddress))
                             return true;
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
@@ -99,7 +99,7 @@ class BusPersistenceDriver implements IPersistenceDriver {
             for (String busId : BusManager.getSingleton().getConnectedBusIds())
                 try {
                     rslt.addAll(Arrays.asList(busEndpoint.getPluginInterfacesNames(busId)));
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -118,7 +118,7 @@ class BusPersistenceDriver implements IPersistenceDriver {
                 for (String busId : BusManager.getSingleton().getConnectedBusIds())
                     try {
                         rslt.addAll(Arrays.asList(busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)));
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
                     }
 

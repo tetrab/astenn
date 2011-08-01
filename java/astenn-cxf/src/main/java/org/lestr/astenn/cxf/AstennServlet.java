@@ -87,25 +87,31 @@ public class AstennServlet extends CXFNonSpringServlet {
 
         Collection<Server> rslt = new ArrayList<Server>();
 
-        ServerFactoryBean servicesFactory = new ServerFactoryBean();
+        try {
 
-        servicesFactory.setBus(bus);
-        servicesFactory.setServiceClass(pluginInterface);
-        servicesFactory.setServiceBean(pluginImplementation.newInstance());
-        servicesFactory.setAddress("/" + pluginInterface.getName() + "/" + pluginImplementation.getName());
+            ServerFactoryBean servicesFactory = new ServerFactoryBean();
 
-        rslt.add(servicesFactory.create());
-
-        WebService annotationWebService = pluginInterface.getAnnotation(WebService.class);
-        if (annotationWebService != null && annotationWebService.name() != null) {
-
-            servicesFactory = new ServerFactoryBean();
+            servicesFactory.setBus(bus);
             servicesFactory.setServiceClass(pluginInterface);
             servicesFactory.setServiceBean(pluginImplementation.newInstance());
-            servicesFactory.setAddress("/" + annotationWebService.name());
+            servicesFactory.setAddress("/" + pluginInterface.getName() + "/" + pluginImplementation.getName());
 
             rslt.add(servicesFactory.create());
 
+            WebService annotationWebService = pluginInterface.getAnnotation(WebService.class);
+            if (annotationWebService != null && annotationWebService.name() != null) {
+
+                servicesFactory = new ServerFactoryBean();
+                servicesFactory.setServiceClass(pluginInterface);
+                servicesFactory.setServiceBean(pluginImplementation.newInstance());
+                servicesFactory.setAddress("/" + annotationWebService.name());
+
+                rslt.add(servicesFactory.create());
+
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(AstennServlet.class.getName()).log(Level.WARNING, null, ex);
         }
 
         return rslt;
