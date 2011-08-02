@@ -43,18 +43,31 @@ class BusPersistenceDriver implements IPersistenceDriver {
 
     public boolean existPluginInterface(String pluginInterfaceName) {
 
-        String[] pluginImplementationsAddresses;
+        if (pluginInterfaceName.equals(IPluginsProvider.class.getName())
+            || pluginInterfaceName.equals(IBusEndpoint.class.getName()))
+            return false;
 
-        if (!pluginInterfaceName.equals(IPluginsProvider.class.getName())
-            && !pluginInterfaceName.equals(IBusEndpoint.class.getName()))
-            for (IBusEndpoint busEndpoint : PluginsManager.getSingleton().getRegisteredRemotePlugins(IBusEndpoint.class))
-                for (String busId : BusManager.getSingleton().getConnectedBusIds())
-                    try {
-                        if ((pluginImplementationsAddresses = busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)) != null && pluginImplementationsAddresses.length > 0)
-                            return true;
-                    } catch (Exception ex) {
-                        Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        Iterable<String> busEndpointsAddresses = PluginsManager.getSingleton().getConfiguration().getPersistenceDriver().getPluginImplementationsAddresses(IBusEndpoint.class.getName());
+
+        for (String busEndpointAddress : busEndpointsAddresses)
+            for (String busId : BusManager.getSingleton().getConnectedBusIds())
+                try {
+
+                    IBusEndpoint busEndpoint = getBusEndpoint(busEndpointAddress);
+
+                    String[] pluginImplementationsAddresses;
+                    if ((pluginImplementationsAddresses = busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)) != null
+                        && pluginImplementationsAddresses.length > 0)
+                        return true;
+
+                } catch (Exception ex) {
+
+                    Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.FINEST, null, ex);
+
+                    PluginsManager.getSingleton().unregisterPlugin(IBusEndpoint.class, busEndpointAddress);
+                    break;
+
+                }
 
         return false;
 
@@ -74,16 +87,29 @@ class BusPersistenceDriver implements IPersistenceDriver {
     public boolean existPluginImplementation(String pluginInterfaceName,
                                              String pluginImplementationAddress) {
 
-        if (!pluginInterfaceName.equals(IPluginsProvider.class.getName())
-            && !pluginInterfaceName.equals(IBusEndpoint.class.getName()))
-            for (IBusEndpoint busEndpoint : PluginsManager.getSingleton().getRegisteredRemotePlugins(IBusEndpoint.class))
-                for (String busId : BusManager.getSingleton().getConnectedBusIds())
-                    try {
-                        if (Arrays.asList(busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)).contains(pluginImplementationAddress))
-                            return true;
-                    } catch (Exception ex) {
-                        Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        if (pluginInterfaceName.equals(IPluginsProvider.class.getName())
+            || pluginInterfaceName.equals(IBusEndpoint.class.getName()))
+            return false;
+
+        Iterable<String> busEndpointsAddresses = PluginsManager.getSingleton().getConfiguration().getPersistenceDriver().getPluginImplementationsAddresses(IBusEndpoint.class.getName());
+
+        for (String busEndpointAddress : busEndpointsAddresses)
+            for (String busId : BusManager.getSingleton().getConnectedBusIds())
+                try {
+
+                    IBusEndpoint busEndpoint = getBusEndpoint(busEndpointAddress);
+
+                    if (Arrays.asList(busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)).contains(pluginImplementationAddress))
+                        return true;
+
+                } catch (Exception ex) {
+
+                    Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.FINEST, null, ex);
+
+                    PluginsManager.getSingleton().unregisterPlugin(IBusEndpoint.class, busEndpointAddress);
+                    break;
+
+                }
 
         return false;
 
@@ -94,12 +120,23 @@ class BusPersistenceDriver implements IPersistenceDriver {
 
         Collection<String> rslt = new ArrayList<String>();
 
-        for (IBusEndpoint busEndpoint : PluginsManager.getSingleton().getRegisteredRemotePlugins(IBusEndpoint.class))
+        Iterable<String> busEndpointsAddresses = PluginsManager.getSingleton().getConfiguration().getPersistenceDriver().getPluginImplementationsAddresses(IBusEndpoint.class.getName());
+
+        for (String busEndpointAddress : busEndpointsAddresses)
             for (String busId : BusManager.getSingleton().getConnectedBusIds())
                 try {
+
+                    IBusEndpoint busEndpoint = getBusEndpoint(busEndpointAddress);
+
                     rslt.addAll(Arrays.asList(busEndpoint.getPluginInterfacesNames(busId)));
+
                 } catch (Exception ex) {
-                    Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
+
+                    Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.FINEST, null, ex);
+
+                    PluginsManager.getSingleton().unregisterPlugin(IBusEndpoint.class, busEndpointAddress);
+                    break;
+
                 }
 
         return rslt;
@@ -111,19 +148,44 @@ class BusPersistenceDriver implements IPersistenceDriver {
 
         Collection<String> rslt = new ArrayList<String>();
 
-        if (!pluginInterfaceName.equals(IPluginsProvider.class.getName())
-            && !pluginInterfaceName.equals(IBusEndpoint.class.getName()))
-            for (IBusEndpoint busEndpoint : PluginsManager.getSingleton().getRegisteredRemotePlugins(IBusEndpoint.class))
-                for (String busId : BusManager.getSingleton().getConnectedBusIds())
-                    try {
-                        rslt.addAll(Arrays.asList(busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)));
-                    } catch (Exception ex) {
-                        Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        if (pluginInterfaceName.equals(IPluginsProvider.class.getName())
+            || pluginInterfaceName.equals(IBusEndpoint.class.getName()))
+            return rslt;
+
+        Iterable<String> busEndpointsAddresses = PluginsManager.getSingleton().getConfiguration().getPersistenceDriver().getPluginImplementationsAddresses(IBusEndpoint.class.getName());
+
+        for (String busEndpointAddress : busEndpointsAddresses)
+            for (String busId : BusManager.getSingleton().getConnectedBusIds())
+                try {
+
+                    IBusEndpoint busEndpoint = getBusEndpoint(busEndpointAddress);
+
+                    rslt.addAll(Arrays.asList(busEndpoint.getPluginImplementationsAddresses(busId, pluginInterfaceName)));
+
+                } catch (Exception ex) {
+
+                    Logger.getLogger(BusPersistenceDriver.class.getName()).log(Level.FINEST, null, ex);
+
+                    PluginsManager.getSingleton().unregisterPlugin(IBusEndpoint.class, busEndpointAddress);
+                    break;
+
+                }
 
         return rslt;
 
     }// END Method getPluginImplementationsAddresses
+
+
+    private IBusEndpoint getBusEndpoint(String busEndpointAddress) {
+
+        for (IPluginsProvider pluginsProvider : PluginsManager.getSingleton().getRegisteredLocalPlugins(IPluginsProvider.class))
+            if (!(pluginsProvider instanceof IPluginsProvider.LocalPluginsProvider)
+                && busEndpointAddress.startsWith(pluginsProvider.getScheme() + ":"))
+                return pluginsProvider.getPlugin(IBusEndpoint.class, busEndpointAddress);
+
+        return null;
+        
+    }// END Method getBusEndpoint
 
 
 }// END Class BusPersistenceDriver
