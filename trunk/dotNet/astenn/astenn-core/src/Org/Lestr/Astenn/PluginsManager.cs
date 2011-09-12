@@ -107,7 +107,7 @@ namespace Org.Lestr.Astenn
         public void RegisterPlugin(Type pluginInterfaceClass, Type pluginImplementationClass, IPersistenceDriver persistenceDriver)
         {
 
-            RegisterSingletonPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName, persistenceDriver);
+            RegisterPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName, persistenceDriver);
 
         }// END Method RegisterPlugin
 
@@ -115,7 +115,9 @@ namespace Org.Lestr.Astenn
         public void RegisterSingletonPlugin(Type pluginInterfaceClass, Type pluginImplementationClass)
         {
 
-            RegisterSingletonPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName);
+            UnregisterSingletonPlugin(pluginInterfaceClass);
+
+            RegisterPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName);
 
         }// END Method RegisterPlugin
 
@@ -125,8 +127,7 @@ namespace Org.Lestr.Astenn
 
             UnregisterSingletonPlugin(pluginInterfaceClass);
 
-            Configuration.PersistenceDriver.AddPluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
-            Configuration.PersistenceDriver.AddPluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, pluginImplementationAddress);
+            RegisterPlugin(pluginInterfaceClass, pluginImplementationAddress);
 
         }// END Method RegisterPlugin
 
@@ -134,7 +135,7 @@ namespace Org.Lestr.Astenn
         public void RegisterSingletonPlugin(Type pluginInterfaceClass, string pluginImplementationAddress, IPersistenceDriver persistenceDriver)
         {
 
-            UnregisterSingletonPlugin(pluginInterfaceClass);
+            UnregisterSingletonPlugin(pluginInterfaceClass , persistenceDriver);
 
             RegisterPlugin(pluginInterfaceClass, pluginImplementationAddress, persistenceDriver);
 
@@ -144,7 +145,7 @@ namespace Org.Lestr.Astenn
         public void RegisterSingletonPlugin(Type pluginInterfaceClass, Type pluginImplementationClass, IPersistenceDriver persistenceDriver)
         {
 
-            UnregisterSingletonPlugin(pluginInterfaceClass);
+            UnregisterSingletonPlugin(pluginInterfaceClass, persistenceDriver);
 
             RegisterPlugin(pluginInterfaceClass, "local:" + pluginImplementationClass.AssemblyQualifiedName, persistenceDriver);
 
@@ -195,17 +196,25 @@ namespace Org.Lestr.Astenn
         public void UnregisterSingletonPlugin(Type pluginInterfaceClass)
         {
 
-            if (Configuration.PersistenceDriver.ExistPluginInterface(pluginInterfaceClass.AssemblyQualifiedName))
+            UnregisterSingletonPlugin(pluginInterfaceClass, Configuration.PersistenceDriver);
+
+        }// END Method UnregisterSingletonPlugin
+
+
+        public void UnregisterSingletonPlugin(Type pluginInterfaceClass, IPersistenceDriver persistenceDriver)
+        {
+
+            if (persistenceDriver.ExistPluginInterface(pluginInterfaceClass.AssemblyQualifiedName))
             {
 
-                foreach (string implementationAddress in new List<string>(Configuration.PersistenceDriver.GetPluginImplementationsAddresses(pluginInterfaceClass.AssemblyQualifiedName)))
-                    Configuration.PersistenceDriver.RemovePluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, implementationAddress);
+                foreach (string implementationAddress in new List<string>(persistenceDriver.GetPluginImplementationsAddresses(pluginInterfaceClass.AssemblyQualifiedName)))
+                    persistenceDriver.RemovePluginImplementation(pluginInterfaceClass.AssemblyQualifiedName, implementationAddress);
 
-                Configuration.PersistenceDriver.RemovePluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
+                persistenceDriver.RemovePluginInterface(pluginInterfaceClass.AssemblyQualifiedName);
 
             }
 
-        }// END Method UnregisterPlugin
+        }// END Method UnregisterSingletonPlugin
 
 
         public IEnumerable<PluginInterfaceType> GetRegisteredPlugins<PluginInterfaceType>()
