@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Maj versions</actionName>
+            <displayName>Maj versions</displayName>
+            <goals>
+                <goal>versions:set</goal>
+            </goals>
+            <properties>
+                
+                <newVersion>1.0.0</newVersion>
+            </properties>
+        </action>
+    </actions>
