@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.lestr.astenn</groupId>
         <artifactId>astenn-examples</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.lestr.astenn.astenn-examples</groupId>
     <artifactId>standalone-cxf</artifactId>
     <name>Astenn :: Examples :: Standalone CXF</name>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
  
     <modules>
