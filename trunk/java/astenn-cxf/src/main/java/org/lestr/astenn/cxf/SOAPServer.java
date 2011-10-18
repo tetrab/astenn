@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.jws.WebService;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 
 /**
  * Cette classe est un greffon Astenn mettant en oeuvre un serveur SOAP s'appuyant sur la librairie CXF.
@@ -213,7 +214,10 @@ public class SOAPServer implements IServer {
                 servers.addAll(astennServlet.exposeLocalPlugin(pluginInterface, pluginImplementation));
             else {
 
-                servicesFactory = new ServerFactoryBean();
+                boolean utiliserJaxWs = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
+                                        && (Boolean) PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT");
+
+                servicesFactory = utiliserJaxWs ? new JaxWsServerFactoryBean() : new ServerFactoryBean();
                 servicesFactory.setServiceClass(pluginInterface);
                 servicesFactory.setServiceBean(pluginImplementation.newInstance());
                 servicesFactory.setAddress("http://localhost:" + getPort() + "/" + pluginInterface.getName() + "/" + pluginImplementation.getName());
@@ -223,7 +227,7 @@ public class SOAPServer implements IServer {
                 WebService annotationWebService = pluginInterface.getAnnotation(WebService.class);
                 if (annotationWebService != null && annotationWebService.name() != null) {
 
-                    servicesFactory = new ServerFactoryBean();
+                    servicesFactory = utiliserJaxWs ? new JaxWsServerFactoryBean() : new ServerFactoryBean();
                     servicesFactory.setServiceClass(pluginInterface);
                     servicesFactory.setServiceBean(pluginImplementation.newInstance());
                     servicesFactory.setAddress("http://localhost:" + getPort() + "/" + annotationWebService.name());
@@ -254,7 +258,7 @@ public class SOAPServer implements IServer {
         if (runningServices.containsKey(localAdress))
             for (Server server : runningServices.get(localAdress))
                 server.stop();
-            
+
         runningServices.remove(localAdress);
 
     }// END Method unexposeLocalPlugin

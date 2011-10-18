@@ -111,9 +111,9 @@ public class DefaultBusEndpoint extends UnicastRemoteObject implements IBusEndpo
                             } catch (Exception ex) {
                                 break;
                             }
-
+                            
                 knowBusEndpointsAddresses.put(busId, rslt);
-
+                
             }
 
         }

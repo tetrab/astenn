@@ -114,35 +114,37 @@ public class BusManager {
                         busEndpointsAlreadyRegisteredIds.add(busEndpoint.getEndpointId(busId));
 
                         // Iterate remote bus endpoint know by the current remote bus endpoint
-                        for (String otherBusEndpointAddress : busEndpoint.getKnowBusEndpointsAddresses(busId))
-                            // If the new current remote bus endpoint has not been already processed
-                            if (!busEndpointsAlreadyRegisteredAddresses.contains(otherBusEndpointAddress)) {
+                        String[] knowBusEndpointsAddresses = busEndpoint.getKnowBusEndpointsAddresses(busId);
+                        if (knowBusEndpointsAddresses != null)
+                            for (String otherBusEndpointAddress : knowBusEndpointsAddresses)
+                                // If the new current remote bus endpoint has not been already processed
+                                if (!busEndpointsAlreadyRegisteredAddresses.contains(otherBusEndpointAddress)) {
 
-                                // Test it
-                                boolean ok = false;
+                                    // Test it
+                                    boolean ok = false;
 
-                                for (IPluginsProvider pluginsProvider : PluginsManager.getSingleton().getRegisteredPlugins(IPluginsProvider.class))
-                                    if (otherBusEndpointAddress.startsWith(pluginsProvider.getScheme() + ":"))
-                                        try {
-                                            pluginsProvider.getPlugin(IBusEndpoint.class, otherBusEndpointAddress).getEndpointId(busId);
-                                            ok = true;
-                                            break;
-                                        } catch (Exception ex) {
-                                            break;
-                                        }
+                                    for (IPluginsProvider pluginsProvider : PluginsManager.getSingleton().getRegisteredPlugins(IPluginsProvider.class))
+                                        if (otherBusEndpointAddress.startsWith(pluginsProvider.getScheme() + ":"))
+                                            try {
+                                                pluginsProvider.getPlugin(IBusEndpoint.class, otherBusEndpointAddress).getEndpointId(busId);
+                                                ok = true;
+                                                break;
+                                            } catch (Exception ex) {
+                                                break;
+                                            }
 
-                                if (ok) {
+                                    if (ok) {
 
-                                    // Register it
-                                    PluginsManager.getSingleton().registerPlugin(IBusEndpoint.class, otherBusEndpointAddress);
+                                        // Register it
+                                        PluginsManager.getSingleton().registerPlugin(IBusEndpoint.class, otherBusEndpointAddress);
 
-                                    // Remember that it has been already registered
-                                    busEndpointsAlreadyRegisteredAddresses.add(otherBusEndpointAddress);
-                                    modified = true;
+                                        // Remember that it has been already registered
+                                        busEndpointsAlreadyRegisteredAddresses.add(otherBusEndpointAddress);
+                                        modified = true;
+
+                                    }
 
                                 }
-
-                            }
 
                     }
 
