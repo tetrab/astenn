@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.lestr.astenn.PluginsManager;
@@ -45,7 +46,10 @@ public class SOAPPluginsProvider implements IPluginsProvider {
 
         if (!proxies.containsValue(pluginInterfaceType)) {
 
-            ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+            boolean utiliserJaxWs = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
+                                    && (Boolean) PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT");
+
+            ClientProxyFactoryBean factory = utiliserJaxWs ? new JaxWsProxyFactoryBean() : new ClientProxyFactoryBean();
 
             if (PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("USERNAME")
                 && PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("PASSWORD")) {
@@ -63,7 +67,7 @@ public class SOAPPluginsProvider implements IPluginsProvider {
 
                 HTTPConduit conduit = (HTTPConduit) ClientProxy.getClient(proxies.get(pluginInterfaceType)).getConduit();
 
-                if (conduit.getClient() == null){
+                if (conduit.getClient() == null) {
                     HTTPClientPolicy police = new HTTPClientPolicy();
                     police.setConnectionTimeout(36000);
                     police.setAllowChunking(false);
@@ -76,7 +80,7 @@ public class SOAPPluginsProvider implements IPluginsProvider {
 
                     String cookie = "";
                     for (String cle : cookies.keySet())
-                        cookie = cookie + cookies.get(cle) + ";";
+                        cookie = cookie + cle + "=" + cookies.get(cle) + ";";
                     cookie = cookie.substring(0, cookie.length() - 1);
 
                     conduit.getClient().setCookie(cookie);

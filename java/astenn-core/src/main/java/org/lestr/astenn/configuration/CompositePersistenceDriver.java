@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.lestr.astenn.configuration;
 
 import org.lestr.astenn.plugin.IPersistenceDriver;
@@ -18,11 +17,12 @@ public class CompositePersistenceDriver implements IPersistenceDriver {
 
 
     private IPersistenceDriver readWritePersistenceDriver;
+
+
     private Collection<IPersistenceDriver> readOnlyPersistenceDrivers;
 
 
-    public CompositePersistenceDriver()
-    {
+    public CompositePersistenceDriver() {
 
         readWritePersistenceDriver = new RAMPersistenceDriver();
         readOnlyPersistenceDrivers = new ArrayList<IPersistenceDriver>();
@@ -30,8 +30,8 @@ public class CompositePersistenceDriver implements IPersistenceDriver {
     }// END Constructor
 
 
-    public CompositePersistenceDriver(IPersistenceDriver readWritePersistenceDriver, IPersistenceDriver... readOnlyPersistenceDrivers)
-    {
+    public CompositePersistenceDriver(IPersistenceDriver readWritePersistenceDriver,
+                                      IPersistenceDriver... readOnlyPersistenceDrivers) {
 
         this.readWritePersistenceDriver = readWritePersistenceDriver;
         this.readOnlyPersistenceDrivers = new ArrayList<IPersistenceDriver>();
@@ -90,11 +90,11 @@ public class CompositePersistenceDriver implements IPersistenceDriver {
     @Override
     public boolean existPluginInterface(String pluginInterfaceName) {
 
-        if(readWritePersistenceDriver.existPluginInterface(pluginInterfaceName))
+        if (readWritePersistenceDriver.existPluginInterface(pluginInterfaceName))
             return true;
 
-        for(IPersistenceDriver driver : readOnlyPersistenceDrivers)
-            if(driver.existPluginInterface(pluginInterfaceName))
+        for (IPersistenceDriver driver : readOnlyPersistenceDrivers)
+            if (driver.existPluginInterface(pluginInterfaceName))
                 return true;
 
         return false;
@@ -103,7 +103,8 @@ public class CompositePersistenceDriver implements IPersistenceDriver {
 
 
     @Override
-    public void addPluginImplementation(String pluginInterfaceName, String pluginImplementationAddress) {
+    public void addPluginImplementation(String pluginInterfaceName,
+                                        String pluginImplementationAddress) {
 
         readWritePersistenceDriver.addPluginImplementation(pluginInterfaceName, pluginImplementationAddress);
 
@@ -111,24 +112,27 @@ public class CompositePersistenceDriver implements IPersistenceDriver {
 
 
     @Override
-    public void removePluginImplementation(String pluginInterfaceName, String pluginImplementationAddress) {
+    public void removePluginImplementation(String pluginInterfaceName,
+                                           String pluginImplementationAddress) {
 
-        readWritePersistenceDriver.removePluginImplementation(pluginInterfaceName, pluginImplementationAddress);
+        if (readWritePersistenceDriver.existPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
+            readWritePersistenceDriver.removePluginImplementation(pluginInterfaceName, pluginImplementationAddress);
 
     }// END Method removePluginImplementation
 
 
     @Override
-    public boolean existPluginImplementation(String pluginInterfaceName, String pluginImplementationAddress) {
+    public boolean existPluginImplementation(String pluginInterfaceName,
+                                             String pluginImplementationAddress) {
 
-        if(readWritePersistenceDriver.existPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
+        if (readWritePersistenceDriver.existPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
             return true;
 
-        for(IPersistenceDriver driver : readOnlyPersistenceDrivers)
-            if(driver.existPluginInterface(pluginInterfaceName) &&
-               driver.existPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
+        for (IPersistenceDriver driver : readOnlyPersistenceDrivers)
+            if (driver.existPluginInterface(pluginInterfaceName)
+                && driver.existPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
                 return true;
-        
+
         return false;
 
     }// END Method existPluginImplementation
@@ -139,12 +143,12 @@ public class CompositePersistenceDriver implements IPersistenceDriver {
 
         ArrayList<String> rslt = new ArrayList<String>();
 
-        for(String interfaceName : readWritePersistenceDriver.getPluginInterfacesNames())
+        for (String interfaceName : readWritePersistenceDriver.getPluginInterfacesNames())
             rslt.add(interfaceName);
 
-        for(IPersistenceDriver driver : readOnlyPersistenceDrivers)
-            for(String interfaceName : driver.getPluginInterfacesNames())
-                if(!rslt.contains(interfaceName))
+        for (IPersistenceDriver driver : readOnlyPersistenceDrivers)
+            for (String interfaceName : driver.getPluginInterfacesNames())
+                if (!rslt.contains(interfaceName))
                     rslt.add(interfaceName);
 
         return rslt;
@@ -157,14 +161,14 @@ public class CompositePersistenceDriver implements IPersistenceDriver {
 
         ArrayList<String> rslt = new ArrayList<String>();
 
-        if(readWritePersistenceDriver.existPluginInterface(pluginInterfaceName))
-            for(String implementation : readWritePersistenceDriver.getPluginImplementationsAddresses(pluginInterfaceName))
+        if (readWritePersistenceDriver.existPluginInterface(pluginInterfaceName))
+            for (String implementation : readWritePersistenceDriver.getPluginImplementationsAddresses(pluginInterfaceName))
                 rslt.add(implementation);
 
-        for(IPersistenceDriver driver : readOnlyPersistenceDrivers)
-            if(driver.existPluginInterface(pluginInterfaceName))
-                for(String implementation : driver.getPluginImplementationsAddresses(pluginInterfaceName))
-                    if(!rslt.contains(implementation))
+        for (IPersistenceDriver driver : readOnlyPersistenceDrivers)
+            if (driver.existPluginInterface(pluginInterfaceName))
+                for (String implementation : driver.getPluginImplementationsAddresses(pluginInterfaceName))
+                    if (!rslt.contains(implementation))
                         rslt.add(implementation);
 
         return rslt;

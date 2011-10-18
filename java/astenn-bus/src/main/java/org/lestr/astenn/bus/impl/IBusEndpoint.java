@@ -18,26 +18,34 @@ package org.lestr.astenn.bus.impl;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 
 /**
  *
  * @author pibonnin
  */
+@WebService
 public interface IBusEndpoint extends Remote {
 
 
+    @WebMethod
     String getEndpointId(String busId) throws RemoteException;
 
 
+    @WebMethod
     String[] getPluginInterfacesNames(String busId) throws RemoteException;
 
 
+    @WebMethod
     String[] getPluginImplementationsAddresses(String busId, String pluginInterfaceClassName) throws RemoteException;
 
 
+    @WebMethod
     String[] getKnowBusEndpointsAddresses(String busId) throws RemoteException;
 
 
+    @WebMethod
     void declareBusEndpointAddress(String busId, String address) throws RemoteException;
 
 

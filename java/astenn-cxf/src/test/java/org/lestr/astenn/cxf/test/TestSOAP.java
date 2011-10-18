@@ -4,6 +4,8 @@
  */
 package org.lestr.astenn.cxf.test;
 
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 import org.lestr.astenn.PluginsManager;
 import org.lestr.astenn.cxf.SOAPServer;
 import junit.framework.TestCase;
@@ -94,15 +96,19 @@ public class TestSOAP extends TestCase {
     }// END Method test1
 
 
+    @WebService
     public static interface IPlugin {
 
-
+        
+        @WebMethod
         public boolean test1();
 
 
+        @WebMethod
         public Bean test2(Bean bean);
 
 
+        @WebMethod
         public void test3();
 
 
