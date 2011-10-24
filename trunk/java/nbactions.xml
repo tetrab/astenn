@@ -8,7 +8,7 @@
             </goals>
             <properties>
                 
-                <newVersion>1.0.0</newVersion>
+                <newVersion>1.0.1-SNAPSHOT</newVersion>
             </properties>
         </action>
     </actions>
