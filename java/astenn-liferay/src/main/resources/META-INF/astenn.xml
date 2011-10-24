@@ -1,0 +1,7 @@
+<astenn>
+
+    <plugin-interface class-name="org.lestr.astenn.plugin.AstennFirstUserListener">
+        <plugin-implementation address="local:org.lestr.astenn.liferay.impl.AstennFirstUserListener" />
+    </plugin-interface>
+    
+</astenn>
