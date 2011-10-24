@@ -5,20 +5,20 @@
     <parent>
         <groupId>org.lestr.astenn</groupId>
         <artifactId>astenn-examples</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <groupId>org.lestr.astenn.astenn-examples</groupId>
     <artifactId>annotation</artifactId>
     <name>Astenn :: Examples :: Annotation</name>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
   
     <dependencies>
         <dependency>
             <groupId>org.lestr.astenn</groupId>
             <artifactId>astenn-core</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
