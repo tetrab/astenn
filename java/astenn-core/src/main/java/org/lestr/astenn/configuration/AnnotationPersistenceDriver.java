@@ -232,6 +232,8 @@ public class AnnotationPersistenceDriver implements IPersistenceDriver {
                             rslt.add(klass);
 
                     } catch (NoClassDefFoundError ex) {
+                    } catch (ExceptionInInitializerError ex) {
+                    } catch (RuntimeException ex) {
                     } catch (Exception ex) {
                     }
 
