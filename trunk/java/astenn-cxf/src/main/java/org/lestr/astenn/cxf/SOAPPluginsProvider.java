@@ -49,13 +49,15 @@ public class SOAPPluginsProvider implements IPluginsProvider {
             boolean utiliserJaxWs = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
                                     && (Boolean) PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT");
 
-            ClientProxyFactoryBean factory = utiliserJaxWs ? new JaxWsProxyFactoryBean() : new ClientProxyFactoryBean();
+            ClientProxyFactoryBean factory = utiliserJaxWs
+                                             ? new JaxWsProxyFactoryBean()
+                                             : new ClientProxyFactoryBean();
 
-            if (PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("USERNAME")
-                && PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("PASSWORD")) {
+            if (PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("USERNAME")
+                && PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("PASSWORD")) {
 
-                factory.setUsername(PluginsManager.getSingleton().getConfiguration().getProperties().get("USERNAME").toString());
-                factory.setPassword(PluginsManager.getSingleton().getConfiguration().getProperties().get("PASSWORD").toString());
+                factory.setUsername(PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().get("USERNAME").toString());
+                factory.setPassword(PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().get("PASSWORD").toString());
 
             }
 

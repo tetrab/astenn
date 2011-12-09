@@ -46,11 +46,11 @@ public class AstennServlet extends CXFNonSpringServlet {
 
 
     @Override
-    public void loadBus(ServletConfig servletConfig) throws ServletException {
+    public void loadBus(ServletConfig servletConfig) {
 
         super.loadBus(servletConfig);
 
-        BusFactory.setDefaultBus(bus);
+        BusFactory.setDefaultBus(getBus());
 
         server = new SOAPServer(this);
 
@@ -91,7 +91,7 @@ public class AstennServlet extends CXFNonSpringServlet {
 
             ServerFactoryBean servicesFactory = new ServerFactoryBean();
 
-            servicesFactory.setBus(bus);
+            servicesFactory.setBus(getBus());
             servicesFactory.setServiceClass(pluginInterface);
             servicesFactory.setServiceBean(pluginImplementation.newInstance());
             servicesFactory.setAddress("/" + pluginInterface.getName() + "/" + pluginImplementation.getName());
