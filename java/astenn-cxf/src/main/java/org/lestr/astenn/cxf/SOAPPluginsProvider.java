@@ -6,10 +6,13 @@ package org.lestr.astenn.cxf;
 
 import org.lestr.astenn.plugin.IPluginsProvider;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.lestr.astenn.PluginsManager;
@@ -65,9 +68,19 @@ public class SOAPPluginsProvider implements IPluginsProvider {
             factory.setAddress(pluginImplementationAddress.substring((getScheme() + ":").length()));
             proxies.put(pluginInterfaceType, factory.create());
 
+            Client client = ClientProxy.getClient(proxies.get(pluginInterfaceType));
+
+            if (PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("HEADERS")) {
+
+                Map<String, List<String>> enTetes = (Map<String, List<String>>) PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().get("HEADERS");
+                
+                client.getRequestContext().put(Message.PROTOCOL_HEADERS, enTetes);
+
+            }
+
             if (PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("COOKIES")) {
 
-                HTTPConduit conduit = (HTTPConduit) ClientProxy.getClient(proxies.get(pluginInterfaceType)).getConduit();
+                HTTPConduit conduit = (HTTPConduit) ClientProxy.getClient(client).getConduit();
 
                 if (conduit.getClient() == null) {
                     HTTPClientPolicy police = new HTTPClientPolicy();
