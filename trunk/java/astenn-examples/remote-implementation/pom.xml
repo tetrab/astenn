@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.lestr.astenn</groupId>
         <artifactId>astenn-examples</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
 
     <groupId>org.lestr.astenn.astenn-examples</groupId>
     <artifactId>remote-implementation</artifactId>
     <name>Astenn :: Examples :: Remote Implementation</name>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
  
     <modules>
