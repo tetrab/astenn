@@ -1,0 +1,56 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.lestr.astenn.astenn-examples</groupId>
+        <artifactId>remote-implementation</artifactId>
+        <version>1.0.2</version>
+    </parent>
+
+    <groupId>org.lestr.astenn.astenn-examples.remote-implementation</groupId>
+    <artifactId>implementation</artifactId>
+    <name>Astenn :: Examples :: Remote Implementation :: Implementation</name>
+    <version>1.0.2</version>
+    <packaging>war</packaging>
+    
+    <dependencies>
+    
+        <dependency>
+            <groupId>org.lestr.astenn</groupId>
+            <artifactId>astenn-core</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.lestr.astenn</groupId>
+            <artifactId>astenn-cxf</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.lestr.astenn.astenn-examples.remote-implementation</groupId>
+            <artifactId>api</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        
+    </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+    
+</project>
