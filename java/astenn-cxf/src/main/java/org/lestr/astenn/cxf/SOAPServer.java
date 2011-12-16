@@ -183,6 +183,7 @@ public class SOAPServer implements IServer {
     }// END Method stop
 
 
+    @Override
     public String getPluginRemoteAddress(Class<?> pluginInterfaceClass,
                                          Class<?> pluginImplementationClass) {
 
@@ -191,6 +192,16 @@ public class SOAPServer implements IServer {
                           : rootURL.toString()) + "/" + pluginInterfaceClass.getName() + "/" + pluginImplementationClass.getName();
 
     }// END Method getPluginRemoteAddress
+
+
+    /**
+     * @return the rootURL
+     */
+    void setRootURL(URL rootURL) {
+
+        this.rootURL = rootURL;
+
+    }// END Method rootURL
 
 
     /**
@@ -214,23 +225,21 @@ public class SOAPServer implements IServer {
                 servers.addAll(astennServlet.exposeLocalPlugin(pluginInterface, pluginImplementation));
             else {
 
-                boolean utiliserJaxWs = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
-                                        && (Boolean) PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT");
+                servicesFactory = getServerFactoryBean(pluginInterface);
 
-                servicesFactory = utiliserJaxWs ? new JaxWsServerFactoryBean() : new ServerFactoryBean();
                 servicesFactory.setServiceClass(pluginInterface);
                 servicesFactory.setServiceBean(pluginImplementation.newInstance());
-                servicesFactory.setAddress("http://localhost:" + getPort() + "/" + pluginInterface.getName() + "/" + pluginImplementation.getName());
+                servicesFactory.setAddress("http://127.0.0.1:" + getPort() + "/" + pluginInterface.getName() + "/" + pluginImplementation.getName());
 
                 servers.add(servicesFactory.create());
 
                 WebService annotationWebService = pluginInterface.getAnnotation(WebService.class);
                 if (annotationWebService != null && annotationWebService.name() != null) {
 
-                    servicesFactory = utiliserJaxWs ? new JaxWsServerFactoryBean() : new ServerFactoryBean();
+                    servicesFactory = getServerFactoryBean(pluginInterface);
                     servicesFactory.setServiceClass(pluginInterface);
                     servicesFactory.setServiceBean(pluginImplementation.newInstance());
-                    servicesFactory.setAddress("http://localhost:" + getPort() + "/" + annotationWebService.name());
+                    servicesFactory.setAddress("http://127.0.0.1:" + getPort() + "/" + annotationWebService.name());
 
                     servers.add(servicesFactory.create());
 
@@ -264,14 +273,32 @@ public class SOAPServer implements IServer {
     }// END Method unexposeLocalPlugin
 
 
-    /**
-     * @return the rootURL
-     */
-    void setRootURL(URL rootURL) {
+    private ServerFactoryBean getServerFactoryBean(Class<?> pluginInterface) {
 
-        this.rootURL = rootURL;
+        ServerFactoryBean rslt;
 
-    }// END Method rootURL
+        String jaxWsStrict = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
+                             ? PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT").toString()
+                             : "auto";
+
+        if (jaxWsStrict.equalsIgnoreCase("yes"))
+            rslt = new JaxWsServerFactoryBean();
+        else if (jaxWsStrict.equalsIgnoreCase("no"))
+            rslt = new ServerFactoryBean();
+        else {
+
+
+            WebService annotationWebService = pluginInterface.getAnnotation(WebService.class);
+
+            rslt = annotationWebService != null && annotationWebService.name() != null
+                   ? new JaxWsServerFactoryBean()
+                   : new ServerFactoryBean();
+
+        }
+
+        return rslt;
+
+    }// FIN Méthode getServerFactoryBean
 
 
 }// END Class AstennServer
