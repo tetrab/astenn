@@ -4,6 +4,9 @@
 ==Astenn 1.1.0==
   * astenn-core : système d'interface alternative de point extension ;
   * astenn-bus : optimisation des communications ;
-  * astenn-core : réorganisation de la classe "PluginsManagers".
+  * astenn-core : réorganisation de la classe PluginsManager.
 ==Astenn 1.2.0==
-  * astenn-bus : support UDDI.
+  * astenn-bus : support UDDI ;
+  * support du protocole grs (Genver Remote Service).
+==Astenn 1.3.0==
+  * support du protocole gro (Genver Remote Object).
