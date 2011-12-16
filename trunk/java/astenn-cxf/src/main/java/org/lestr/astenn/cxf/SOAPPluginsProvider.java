@@ -8,6 +8,7 @@ import org.lestr.astenn.plugin.IPluginsProvider;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.jws.WebService;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
@@ -49,12 +50,26 @@ public class SOAPPluginsProvider implements IPluginsProvider {
 
         if (!proxies.containsValue(pluginInterfaceType)) {
 
-            boolean utiliserJaxWs = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
-                                    && (Boolean) PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT");
+            String jaxWsStrict = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
+                                 ? PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT").toString()
+                                 : "auto";
 
-            ClientProxyFactoryBean factory = utiliserJaxWs
-                                             ? new JaxWsProxyFactoryBean()
-                                             : new ClientProxyFactoryBean();
+            ClientProxyFactoryBean factory;
+
+            if (jaxWsStrict.equalsIgnoreCase("yes"))
+                factory = new JaxWsProxyFactoryBean();
+            else if (jaxWsStrict.equalsIgnoreCase("no"))
+                factory = new ClientProxyFactoryBean();
+            else {
+
+
+                WebService annotationWebService = pluginInterfaceType.getAnnotation(WebService.class);
+
+                factory = annotationWebService != null && annotationWebService.name() != null
+                          ? new JaxWsProxyFactoryBean()
+                          : new ClientProxyFactoryBean();
+
+            }
 
             if (PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("USERNAME")
                 && PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("PASSWORD")) {
@@ -73,7 +88,7 @@ public class SOAPPluginsProvider implements IPluginsProvider {
             if (PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("HEADERS")) {
 
                 Map<String, List<String>> enTetes = (Map<String, List<String>>) PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().get("HEADERS");
-                
+
                 client.getRequestContext().put(Message.PROTOCOL_HEADERS, enTetes);
 
             }
