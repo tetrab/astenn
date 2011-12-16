@@ -1,10 +1,10 @@
 = Historique des versions =
-==1.0.0==
+==Astenn 1.0.0==
   * Version initiale
-==1.0.1==
+==Astenn 1.0.1==
   * astenn-core : correction de bugs ;
   * astenn-cxf : ajout d'un mode JAX-RS strict ;
   * astenn-cxf : support de l'identification Basic/Digest/NTLM ;
   * astenn-cxf : fonction d'ajout de cookies ;
-==1.0.2==
+==Astenn 1.0.2==
   * astenn-cxf : fonction d'ajout d'en-têtes HTTP.
