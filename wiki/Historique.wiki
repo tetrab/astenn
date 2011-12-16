@@ -1,6 +1,6 @@
 = Historique des versions =
 ==Astenn 1.0.0==
-  * Version initiale
+  * Version initiale.
 ==Astenn 1.0.1==
   * astenn-core : correction de bugs ;
   * astenn-bus : correction de bugs ;
