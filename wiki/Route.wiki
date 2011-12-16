@@ -7,6 +7,6 @@
   * astenn-core : réorganisation de la classe "PluginsManager".
 ==Astenn 1.2.0==
   * astenn-bus : support UDDI ;
-  * support du protocole grs (Genver Remote Service).
+  * support du protocole GRS (Genver Remote Service).
 ==Astenn 1.3.0==
-  * support du protocole gro (Genver Remote Object).
+  * support du protocole GRO (Genver Remote Object).
