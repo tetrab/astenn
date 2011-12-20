@@ -1,5 +1,6 @@
 =Feuille de route=
 ==Astenn 1.0.3==
+  * astenn-cxf : correction de bugs ;
   * astenn-cxf : auto-sélection du mode "JAX-RS Strict".
 ==Astenn 1.1.0==
   * astenn-core : système d'interface alternative de point extension ;
