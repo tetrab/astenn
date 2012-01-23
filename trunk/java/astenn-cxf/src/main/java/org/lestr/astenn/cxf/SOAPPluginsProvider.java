@@ -49,7 +49,7 @@ public class SOAPPluginsProvider implements IPluginsProvider {
                                                                String pluginImplementationAddress) {
 
         if (!proxies.containsValue(pluginInterfaceType)) {
-
+            
             String jaxWsStrict = PluginsManager.getSingleton().getConfiguration().getProperties().containsKey("JAX-WS STRICT")
                                  ? PluginsManager.getSingleton().getConfiguration().getProperties().get("JAX-WS STRICT").toString()
                                  : "auto";
@@ -95,7 +95,7 @@ public class SOAPPluginsProvider implements IPluginsProvider {
 
             if (PluginsManager.getSingleton().getConfiguration().getCurrentThreadSpecificsProperties().containsKey("COOKIES")) {
 
-                HTTPConduit conduit = (HTTPConduit) ClientProxy.getClient(client).getConduit();
+                HTTPConduit conduit = (HTTPConduit) client.getConduit();
 
                 if (conduit.getClient() == null) {
                     HTTPClientPolicy police = new HTTPClientPolicy();
