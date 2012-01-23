@@ -67,7 +67,8 @@ namespace Org.Lestr.Astenn.Configuration
 	
 	    public void RemovePluginInterface(string pluginInterfaceName) {
 	
-	        readWritePersistenceDriver.RemovePluginInterface(pluginInterfaceName);
+			if(readWritePersistenceDriver.ExistPluginInterface(pluginInterfaceName))
+				readWritePersistenceDriver.RemovePluginInterface(pluginInterfaceName);
 	
 	    }// END Property RemovePluginInterface
 	
@@ -96,8 +97,9 @@ namespace Org.Lestr.Astenn.Configuration
 
         public void RemovePluginImplementation(string pluginInterfaceName, string pluginImplementationAddress)
         {
-	
-	        readWritePersistenceDriver.RemovePluginImplementation(pluginInterfaceName, pluginImplementationAddress);
+
+			if (readWritePersistenceDriver.ExistPluginImplementation(pluginInterfaceName, pluginImplementationAddress))
+				readWritePersistenceDriver.RemovePluginImplementation(pluginInterfaceName, pluginImplementationAddress);
 	
 	    }// END Property RemovePluginImplementation
 

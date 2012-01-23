@@ -52,6 +52,9 @@ public class PluginsManager {
     private IConfiguration configuration;
 
 
+    private IAdvanced advanced;
+
+
     private IPermissionsManager permissionsManager;
 
 
@@ -128,6 +131,36 @@ public class PluginsManager {
                 return threadSpecificsProperties.get(Thread.currentThread());
 
             }// END Method getCurrentThreadSpecificsProperties
+
+
+        };
+
+        advanced = new IAdvanced() {
+
+
+            @Override
+            public <PluginInterfaceType> PluginInterfaceType getPlugin(Class<PluginInterfaceType> pluginInterfaceClass,
+                                                                       String pluginImplementationAddress) {
+
+                PluginInterfaceType rslt = null;
+
+                synchronized (PluginsManager.this) {
+
+                    if (pluginInterfaceClass != IPluginsProvider.class)
+                        for (IPluginsProvider pluginsProvider : getRegisteredLocalPlugins(IPluginsProvider.class))
+                            if (pluginImplementationAddress.startsWith(pluginsProvider.getScheme() + ":")) {
+                                rslt = pluginsProvider.getPlugin(pluginInterfaceClass, pluginImplementationAddress);
+                                break;
+                            }
+
+                    if (pluginImplementationAddress.startsWith(localPluginsProvider.getScheme() + ":"))
+                        rslt = localPluginsProvider.getPlugin(pluginInterfaceClass, pluginImplementationAddress);
+
+                }
+
+                return rslt;
+
+            }// END Method getPlugin
 
 
         };
@@ -446,6 +479,13 @@ public class PluginsManager {
     }// END Method getConfiguration
 
 
+    public IAdvanced getAdvanced() {
+
+        return advanced;
+
+    }// END Method getAdvanced
+
+
     private void processAutoExposure() {
 
         if (persistenceDriver != null) {
@@ -480,6 +520,16 @@ public class PluginsManager {
         }
 
     }// FIN Method processAutoExposure
+
+
+    public static interface IAdvanced {
+
+
+         <PluginInterfaceType> PluginInterfaceType getPlugin(Class<PluginInterfaceType> pluginInterfaceClass,
+                                                             String pluginImplementationAddress);
+
+
+    }// END Interface IAdvanced
 
 
 }// END Class PluginsManager
