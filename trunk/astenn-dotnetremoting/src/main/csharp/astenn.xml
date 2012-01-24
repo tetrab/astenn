@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<astenn>
+
+  <plugin-interface class-name="Org.Lestr.Astenn.Plugin.IPluginsProvider, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21ff90bd19b14198">
+    <plugin-implementation address="local:Org.Lestr.Astenn.DotNetRemoting.DotNetRemotingPluginsProvider, Org.Lestr.Astenn.DotNetRemoting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=51e459a38300f61a" />
+  </plugin-interface>
+
+  <plugin-interface class-name="Org.Lestr.Astenn.Plugin.IServer, Org.Lestr.Astenn.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=21ff90bd19b14198">
+    <plugin-implementation address="local:Org.Lestr.Astenn.DotNetRemoting.DotNetRemotingServer, Org.Lestr.Astenn.DotNetRemoting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=51e459a38300f61a" />
+  </plugin-interface>
+
+</astenn>

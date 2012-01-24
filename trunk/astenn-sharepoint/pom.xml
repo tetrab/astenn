@@ -1,0 +1,52 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.lestr</groupId>
+        <artifactId>astenn</artifactId>
+        <version>1.0.3-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.lestr.astenn</groupId>
+    <artifactId>astenn-sharepoint</artifactId>
+    <name>Astenn :: SharePoint</name>
+    <version>1.0.3-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <configuration>
+                            <target>
+
+                                <exec executable="${msbuild.executable}">
+                                    <arg value="src/main/csharp/${project.artifactId}.csproj"/>
+                                    <arg value="/t:Rebuild"/>
+                                    <arg value="/p:Configuration=${msbuild.cible}"/>
+                                </exec>
+                
+                                <copy todir="target">
+                                    <fileset dir="src/main/csharp/bin/${msbuild.cible}"/>
+                                </copy>
+
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        
+        </plugins>
+    </build>
+    
+</project>
