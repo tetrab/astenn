@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.lestr.astenn.configuration.IConfiguration;
@@ -57,7 +56,10 @@ public class PluginsManager {
     private IPermissionsManager permissionsManager;
 
 
-    private CompositePersistenceDriver persistenceDriver;
+    private CompositePersistenceDriver compositePersistenceDriver;
+
+
+    private IPersistenceDriver rootPersistenceDriver;
 
 
     private IPluginsProvider localPluginsProvider;
@@ -72,21 +74,19 @@ public class PluginsManager {
     private Map<Thread, Map<String, Object>> threadSpecificsProperties;
 
 
-    private Map<Class<?>, List<Class<?>[]>> equivalentsPlugins;
-
-
     private PluginsManager() {
 
-        persistenceDriver = new CompositePersistenceDriver(new EquivalentsPersistenceDriver(new RAMPersistenceDriver()),
-                                                           new CachePersistenceDriver(new EquivalentsPersistenceDriver(new EmbbedXMLDocumentPersistenceDriver())),
-                                                           new CachePersistenceDriver(new EquivalentsPersistenceDriver(new AnnotationPersistenceDriver())));
+        compositePersistenceDriver = new CompositePersistenceDriver(new RAMPersistenceDriver(),
+                                                                    new CachePersistenceDriver(new EmbbedXMLDocumentPersistenceDriver()),
+                                                                    new CachePersistenceDriver(new AnnotationPersistenceDriver()));
+
+        rootPersistenceDriver = new EquivalentsPersistenceDriver(compositePersistenceDriver);
 
         astennInstanceId = UUID.randomUUID().toString();
         properties = new HashMap<String, Object>();
         threadSpecificsProperties = new HashMap<Thread, Map<String, Object>>();
         localPluginsProvider = new IPluginsProvider.LocalPluginsProvider();
         permissionsManager = new PermissionsManagerImpl();
-        equivalentsPlugins = new HashMap<Class<?>, List<Class<?>[]>>();
 
         configuration = new IConfiguration() {
 
@@ -102,7 +102,7 @@ public class PluginsManager {
             @Override
             public CompositePersistenceDriver getPersistenceDriver() {
 
-                return persistenceDriver;
+                return compositePersistenceDriver;
 
             }// END Method getPersistenceDriver
 
@@ -162,70 +162,6 @@ public class PluginsManager {
                 return rslt;
 
             }// END Method getPlugin
-
-
-            @Override
-            public void registerEquivalentPluginInterface(Class<?> pluginInterfaceClass,
-                                                          Class<?> equivalentPluginInterfaceClass,
-                                                          Class<?> translatorClass) {
-
-                if (!equivalentsPlugins.containsKey(pluginInterfaceClass))
-                    equivalentsPlugins.put(pluginInterfaceClass, new ArrayList<Class<?>[]>());
-
-                equivalentsPlugins.get(pluginInterfaceClass).add(new Class<?>[]{equivalentPluginInterfaceClass, translatorClass});
-
-            }// END Method registerEquivalentPluginInterface
-
-
-            @Override
-            public void unregisterEquivalentPluginInterface(Class<?> pluginInterfaceClass,
-                                                            Class<?> equivalentPluginInterfaceClass,
-                                                            Class<?> translatorClass) {
-
-                if (equivalentsPlugins.containsKey(pluginInterfaceClass)) {
-
-                    List<Class<?>[]> equi = equivalentsPlugins.get(pluginInterfaceClass);
-
-                    for (int i = 0; i <= equi.size() - 1; i = i + 1)
-                        if (equi.get(i)[0] == equivalentPluginInterfaceClass) {
-                            equi.remove(i);
-                            break;
-                        }
-
-                    if (equi.isEmpty())
-                        equivalentsPlugins.remove(pluginInterfaceClass);
-
-                }
-
-            }// END Method unregisterEquivalentPluginInterface
-
-
-            @Override
-            public Collection<Class<?>> getEquivalentsPluginsInterfaces(Class<?> pluginInterfaceClass) {
-
-                Collection<Class<?>> rslt = new ArrayList<Class<?>>();
-
-                if (equivalentsPlugins.containsKey(pluginInterfaceClass))
-                    for (Class<?>[] equi : equivalentsPlugins.get(pluginInterfaceClass))
-                        rslt.add(equi[0]);
-
-                return rslt;
-
-            }// END Method getEquivalentsPluginsInterfaces
-
-
-            @Override
-            public Class<?> getEquivalentPluginTranslator(Class<?> pluginInterfaceClass,
-                                                          Class<?> equivalentPluginInterfaceClass) {
-
-                if (equivalentsPlugins.containsKey(pluginInterfaceClass))
-                    for (Class<?>[] equi : equivalentsPlugins.get(pluginInterfaceClass))
-                        if (equi[0] == equivalentPluginInterfaceClass)
-                            return equi[1];
-
-                return null;
-
-            }// END Method getEquivalentPluginTranslator
 
 
         };
@@ -311,7 +247,7 @@ public class PluginsManager {
     public void unregisterPlugin(Class<?> pluginInterfaceClass,
                                  String pluginImplementationAddress) {
 
-        unregisterPlugin(pluginInterfaceClass, pluginImplementationAddress, persistenceDriver.getReadWritePersistenceDriver());
+        unregisterPlugin(pluginInterfaceClass, pluginImplementationAddress, compositePersistenceDriver.getReadWritePersistenceDriver());
 
     }// Method unregisterPlugin
 
@@ -369,8 +305,8 @@ public class PluginsManager {
 
             Collection<String> pluginImplementationAddresses = new ArrayList<String>();
 
-            if (getConfiguration().getPersistenceDriver().existPluginInterface(pluginInterfaceClass.getName()))
-                for (String pluginImplementationAddress : getConfiguration().getPersistenceDriver().getPluginImplementationsAddresses(pluginInterfaceClass.getName()))
+            if (rootPersistenceDriver.existPluginInterface(pluginInterfaceClass.getName()))
+                for (String pluginImplementationAddress : rootPersistenceDriver.getPluginImplementationsAddresses(pluginInterfaceClass.getName()))
                     pluginImplementationAddresses.add(pluginImplementationAddress);
 
             for (String pluginImplementationAddress : pluginImplementationAddresses)
@@ -463,23 +399,6 @@ public class PluginsManager {
 
          <PluginInterfaceType> PluginInterfaceType getPlugin(Class<PluginInterfaceType> pluginInterfaceClass,
                                                              String pluginImplementationAddress);
-
-
-        void registerEquivalentPluginInterface(Class<?> pluginInterfaceClass,
-                                               Class<?> equivalentPluginInterfaceClass,
-                                               Class<?> translatorClass);
-
-
-        void unregisterEquivalentPluginInterface(Class<?> pluginInterfaceClass,
-                                                 Class<?> equivalentPluginInterfaceClass,
-                                                 Class<?> translatorClass);
-
-
-        Collection<Class<?>> getEquivalentsPluginsInterfaces(Class<?> pluginInterfaceClass);
-
-
-        Class<?> getEquivalentPluginTranslator(Class<?> pluginInterfaceClass,
-                                               Class<?> equivalentPluginInterfaceClass);
 
 
     }// END Interface IAdvanced

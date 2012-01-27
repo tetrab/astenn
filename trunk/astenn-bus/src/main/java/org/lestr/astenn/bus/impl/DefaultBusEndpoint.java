@@ -42,7 +42,7 @@ public class DefaultBusEndpoint extends UnicastRemoteObject implements IBusEndpo
 
 
     public DefaultBusEndpoint() throws RemoteException {
-    }
+    }// END Constructor
 
 
     @Override
@@ -53,6 +53,7 @@ public class DefaultBusEndpoint extends UnicastRemoteObject implements IBusEndpo
     }// END Method getEndpointId
 
 
+    @Override
     public String[] getPluginInterfacesNames(String busId) {
 
         Collection<String> rslt = new ArrayList<String>();
@@ -111,9 +112,9 @@ public class DefaultBusEndpoint extends UnicastRemoteObject implements IBusEndpo
                             } catch (Exception ex) {
                                 break;
                             }
-                            
+
                 knowBusEndpointsAddresses.put(busId, rslt);
-                
+
             }
 
         }
@@ -135,10 +136,10 @@ public class DefaultBusEndpoint extends UnicastRemoteObject implements IBusEndpo
                     knowBusEndpointsAddresses.put(busId, new ArrayList<String>());
 
                 if (!knowBusEndpointsAddresses.get(busId).contains(address)) {
-                    
+
                     knowBusEndpointsAddresses.get(busId).add(address);
                     PluginsManager.getSingleton().registerPlugin(IBusEndpoint.class, address);
-                    
+
                 }
 
             }
@@ -148,6 +149,6 @@ public class DefaultBusEndpoint extends UnicastRemoteObject implements IBusEndpo
     }// END Method declareBusEndpointAddress
 
 
-}//FIN Classe IBusEndpoint
+}// END Class IBusEndpoint
 
 

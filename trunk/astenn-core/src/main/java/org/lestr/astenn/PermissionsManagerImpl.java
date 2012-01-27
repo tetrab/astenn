@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lestr.astenn.configuration.IPermissionsManager;
+import org.lestr.astenn.plugin.IEquivalentPluginInterfaceAdapter;
 import org.lestr.astenn.plugin.IPersistenceDriver;
 import org.lestr.astenn.plugin.IPluginsProvider;
 
@@ -82,7 +83,8 @@ class PermissionsManagerImpl implements IPermissionsManager {
                 actuallyExposedLocalPlugins.add(plugin);
 
             for (String pluginInterfaceName : persistenceDriver.getPluginInterfacesNames())
-                if (!pluginInterfaceName.equals(IPluginsProvider.class.getName()))
+                if (!pluginInterfaceName.equals(IPluginsProvider.class.getName())
+                    && !pluginInterfaceName.equals(IEquivalentPluginInterfaceAdapter.class.getName()))
                     for (String pluginImplementationAddress : persistenceDriver.getPluginImplementationsAddresses(pluginInterfaceName))
                         if (pluginImplementationAddress.startsWith("local:"))
                             try {

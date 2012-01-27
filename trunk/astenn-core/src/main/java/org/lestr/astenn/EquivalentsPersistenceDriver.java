@@ -17,9 +17,9 @@ package org.lestr.astenn;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.lestr.astenn.plugin.IEquivalentPluginInterfaceAdapter;
 import org.lestr.astenn.plugin.IPersistenceDriver;
+import org.lestr.astenn.plugin.IPluginsProvider;
 
 /**
  *
@@ -59,12 +59,11 @@ class EquivalentsPersistenceDriver implements IPersistenceDriver {
 
         boolean rslt = persistenceDriver.existPluginInterface(pluginInterfaceName);
 
-        try {
-            for (Class<?> equivalentInterfaceType : PluginsManager.getSingleton().getAdvanced().getEquivalentsPluginsInterfaces(Class.forName(pluginInterfaceName)))
-                rslt = rslt || existPluginInterface(equivalentInterfaceType.getName());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EquivalentsPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (!pluginInterfaceName.equals(IEquivalentPluginInterfaceAdapter.class.getName())
+            && !pluginInterfaceName.equals(IPluginsProvider.class.getName()))
+            for (IEquivalentPluginInterfaceAdapter adapter : PluginsManager.getSingleton().getRegisteredLocalPlugins(IEquivalentPluginInterfaceAdapter.class))
+                if (adapter.getPluginInterface().getName().equals(pluginInterfaceName))
+                    rslt = rslt || persistenceDriver.existPluginInterface(adapter.getPluginEquivalentInterface().getName());
 
         return rslt;
 
@@ -98,12 +97,11 @@ class EquivalentsPersistenceDriver implements IPersistenceDriver {
         boolean rslt = persistenceDriver.existPluginImplementation(pluginInterfaceName,
                                                                    pluginImplementationAddress);
 
-        try {
-            for (Class<?> equivalentInterfaceType : PluginsManager.getSingleton().getAdvanced().getEquivalentsPluginsInterfaces(Class.forName(pluginInterfaceName)))
-                rslt = rslt || existPluginImplementation(equivalentInterfaceType.getName(), pluginImplementationAddress);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EquivalentsPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (!pluginInterfaceName.equals(IEquivalentPluginInterfaceAdapter.class.getName())
+            && !pluginInterfaceName.equals(IPluginsProvider.class.getName()))
+            for (IEquivalentPluginInterfaceAdapter adapter : PluginsManager.getSingleton().getRegisteredLocalPlugins(IEquivalentPluginInterfaceAdapter.class))
+                if (adapter.getPluginInterface().getName().equals(pluginInterfaceName))
+                    rslt = rslt || persistenceDriver.existPluginImplementation(adapter.getPluginEquivalentInterface().getName(), pluginImplementationAddress);
 
         return rslt;
 
@@ -126,19 +124,16 @@ class EquivalentsPersistenceDriver implements IPersistenceDriver {
         for (String implementationAddress : persistenceDriver.getPluginImplementationsAddresses(pluginInterfaceName))
             rslt.add(implementationAddress);
 
-        try {
-            for (Class<?> equivalentInterfaceType : PluginsManager.getSingleton().getAdvanced().getEquivalentsPluginsInterfaces(Class.forName(pluginInterfaceName)))
-                for (String implementationAddress : persistenceDriver.getPluginImplementationsAddresses(equivalentInterfaceType.getName()))
-                    rslt.add(implementationAddress);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EquivalentsPersistenceDriver.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (!pluginInterfaceName.equals(IEquivalentPluginInterfaceAdapter.class.getName())
+            && !pluginInterfaceName.equals(IPluginsProvider.class.getName()))
+            for (IEquivalentPluginInterfaceAdapter adapter : PluginsManager.getSingleton().getRegisteredLocalPlugins(IEquivalentPluginInterfaceAdapter.class))
+                if (adapter.getPluginInterface().getName().equals(pluginInterfaceName))
+                    for (String implementationAddress : persistenceDriver.getPluginImplementationsAddresses(adapter.getPluginInterface().getName()))
+                        rslt.add(implementationAddress);
 
         return rslt;
 
-    }// END Méthode getPluginImplementationsAddresses
+    }// END Method getPluginImplementationsAddresses
 
 
 }// END Class EquivalentsPersistenceDriver
-
-

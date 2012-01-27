@@ -4,7 +4,6 @@
  */
 package org.lestr.astenn.plugin;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lestr.astenn.PluginsManager;
@@ -49,29 +48,17 @@ public interface IPluginsProvider {
 
                 if (pluginInterfaceType.isInstance(instance))
                     rslt = (PluginInterfaceType) instance;
-                else {
-
-                    PluginsManager.IAdvanced advanced = PluginsManager.getSingleton().getAdvanced();
-
-                    for (Class<?> pluginEquivalentInterfaceType : advanced.getEquivalentsPluginsInterfaces(pluginInterfaceType))
-                        if (pluginEquivalentInterfaceType.isInstance(instance)) {
-                            
-                            Class<?> translatorClass = advanced.getEquivalentPluginTranslator(pluginInterfaceType, pluginEquivalentInterfaceType);
-                            rslt = (PluginInterfaceType) translatorClass.getConstructor(pluginEquivalentInterfaceType).newInstance(instance);
-                            
-                        }
-
-                }
+                else
+                    for (IEquivalentPluginInterfaceAdapter adapter : PluginsManager.getSingleton().getRegisteredLocalPlugins(IEquivalentPluginInterfaceAdapter.class))
+                        if (adapter.getPluginInterface() == pluginInterfaceType
+                            && adapter.getPluginEquivalentInterface().isInstance(instance))
+                            rslt = (PluginInterfaceType) adapter.adaptPluginInstance(instance);
 
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
             } catch (InstantiationException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
             }
 
