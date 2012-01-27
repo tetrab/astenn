@@ -4,6 +4,7 @@
   * astenn-core : système d'interface alternative de point extension ;
   * astenn-core : réorganisation de la classe {{{PluginsManager}}} ;
   * astenn-core : amélioration du support du parallélisme ;
+  * astenn-cxf : suppression des délais d'expiration pour la connexion et la lecture ;
   * astenn-cxf : auto-sélection du mode "JAX-RS Strict".
 ==Astenn 1.1.0==
   * astenn-bus : optimisation des communications.
