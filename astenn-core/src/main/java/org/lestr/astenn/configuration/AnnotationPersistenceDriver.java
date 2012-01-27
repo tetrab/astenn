@@ -182,8 +182,7 @@ public class AnnotationPersistenceDriver implements IPersistenceDriver {
                         if (klass.getAnnotation(Plugin.class) != null)
                             rslt.add(klass);
 
-                    } catch (NoClassDefFoundError ex) {
-                    } catch (Exception ex) {
+                    } catch (Throwable ex) {
                     }
 
                 }
@@ -231,10 +230,7 @@ public class AnnotationPersistenceDriver implements IPersistenceDriver {
                         if (klass.getAnnotation(Plugin.class) != null)
                             rslt.add(klass);
 
-                    } catch (NoClassDefFoundError ex) {
-                    } catch (ExceptionInInitializerError ex) {
-                    } catch (RuntimeException ex) {
-                    } catch (Exception ex) {
+                    } catch (Throwable ex) {
                     }
 
                 }

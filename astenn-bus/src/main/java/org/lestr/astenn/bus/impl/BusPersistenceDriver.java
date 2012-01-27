@@ -33,14 +33,17 @@ import org.lestr.astenn.plugin.IPluginsProvider;
 class BusPersistenceDriver implements IPersistenceDriver {
 
 
+    @Override
     public void addPluginInterface(String pluginInterfaceName) {
     }// END Method addPluginInterface
 
 
+    @Override
     public void removePluginInterface(String pluginInterfaceName) {
     }// END Method removePluginInterface
 
 
+    @Override
     public boolean existPluginInterface(String pluginInterfaceName) {
 
         if (pluginInterfaceName.equals(IPluginsProvider.class.getName())
@@ -74,16 +77,19 @@ class BusPersistenceDriver implements IPersistenceDriver {
     }// END Method existPluginInterface
 
 
+    @Override
     public void addPluginImplementation(String pluginInterfaceName,
                                         String pluginImplementationAddress) {
     }// END Method addPluginImplementation
 
 
+    @Override
     public void removePluginImplementation(String pluginInterfaceName,
                                            String pluginImplementationAddress) {
     }// END Method removePluginImplementation
 
 
+    @Override
     public boolean existPluginImplementation(String pluginInterfaceName,
                                              String pluginImplementationAddress) {
 
@@ -116,6 +122,7 @@ class BusPersistenceDriver implements IPersistenceDriver {
     }// END Method existPluginImplementation
 
 
+    @Override
     public Iterable<String> getPluginInterfacesNames() {
 
         Collection<String> rslt = new ArrayList<String>();
@@ -144,6 +151,7 @@ class BusPersistenceDriver implements IPersistenceDriver {
     }// END Method getPluginInterfacesNames
 
 
+    @Override
     public Iterable<String> getPluginImplementationsAddresses(String pluginInterfaceName) {
 
         Collection<String> rslt = new ArrayList<String>();
@@ -184,7 +192,7 @@ class BusPersistenceDriver implements IPersistenceDriver {
                 return pluginsProvider.getPlugin(IBusEndpoint.class, busEndpointAddress);
 
         return null;
-        
+
     }// END Method getBusEndpoint
 
 

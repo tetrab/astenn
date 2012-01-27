@@ -27,6 +27,7 @@ import org.lestr.astenn.plugin.IAstennFirstUseListener;
 public class AstennFirstUseListener implements IAstennFirstUseListener {
 
 
+    @Override
     public void astennInstanceStarting() {
 
         PluginsManager.getSingleton().getConfiguration().getPersistenceDriver().getReadOnlyPersistenceDrivers().add(new BusPersistenceDriver());

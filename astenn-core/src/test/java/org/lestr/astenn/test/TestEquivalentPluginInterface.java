@@ -6,6 +6,7 @@ package org.lestr.astenn.test;
 
 import junit.framework.TestCase;
 import org.lestr.astenn.PluginsManager;
+import org.lestr.astenn.plugin.IEquivalentPluginInterfaceAdapter;
 
 /**
  *
@@ -28,7 +29,7 @@ public class TestEquivalentPluginInterface extends TestCase {
 
         assertEquals(1, i);
 
-        PluginsManager.getSingleton().getAdvanced().registerEquivalentPluginInterface(IPlugin.class, IFrenchPlugin.class, Translator.class);
+        PluginsManager.getSingleton().registerPlugin(IEquivalentPluginInterfaceAdapter.class, Adaptor.class);
 
         i = 0;
 
@@ -39,7 +40,7 @@ public class TestEquivalentPluginInterface extends TestCase {
 
         assertEquals(2, i);
 
-        PluginsManager.getSingleton().getAdvanced().unregisterEquivalentPluginInterface(IPlugin.class, IFrenchPlugin.class, Translator.class);
+        PluginsManager.getSingleton().unregisterPlugin(IEquivalentPluginInterfaceAdapter.class, Adaptor.class);
 
         i = 0;
 
@@ -71,25 +72,41 @@ public class TestEquivalentPluginInterface extends TestCase {
     }// END Interface IPlugin
 
 
-    public static class Translator implements IPlugin {
-
-
-        private IFrenchPlugin frenchPlugin;
-
-
-        public Translator(IFrenchPlugin frenchPlugin) {
-
-            this.frenchPlugin = frenchPlugin;
-
-        }// END Constructor
+    public static class Adaptor implements IEquivalentPluginInterfaceAdapter<IPlugin, IFrenchPlugin> {
 
 
         @Override
-        public boolean test() {
+        public Class<IPlugin> getPluginInterface() {
+            
+            return IPlugin.class;
+            
+        }// END Method getPluginInterface
 
-            return frenchPlugin.frenchTest();
 
-        }// END Méthode test
+        @Override
+        public Class<IFrenchPlugin> getPluginEquivalentInterface() {
+            
+            return IFrenchPlugin.class;
+            
+        }// END Method getPluginEquivalentInterface
+
+
+        @Override
+        public IPlugin adaptPluginInstance(final IFrenchPlugin pluginInterface) {
+            
+            return new IPlugin() {
+
+
+                @Override
+                public boolean test() {
+                    
+                    return pluginInterface.frenchTest();
+                    
+                }// END Method test
+                
+            };
+            
+        }// END Method adaptPluginInstance
 
 
     }// END Class Plugin1

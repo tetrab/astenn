@@ -21,10 +21,14 @@ public class CachePersistenceDriver implements IPersistenceDriver {
     private IPersistenceDriver cachedPersistenceDriver;
 
 
+    private boolean cacheInitialized;
+
+
     public CachePersistenceDriver() {
 
         plugins = new HashMap<String, ArrayList<String>>();
         cachedPersistenceDriver = null;
+        cacheInitialized = false;
 
     }// END Constructor
 
@@ -55,8 +59,7 @@ public class CachePersistenceDriver implements IPersistenceDriver {
 
         this.cachedPersistenceDriver = cachedPersistenceDriver;
 
-        if (cachedPersistenceDriver != null)
-            reloadCache();
+        cacheInitialized = false;
 
     }// END Method setCachedPersistenceDriver
 
@@ -74,6 +77,8 @@ public class CachePersistenceDriver implements IPersistenceDriver {
 
         }
 
+        cacheInitialized = true;
+
     }// END Method ReloadCache
 
 
@@ -81,6 +86,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
     public void addPluginInterface(String pluginInterfaceName) {
 
         if (getCachedPersistenceDriver() != null) {
+
+            if (!cacheInitialized)
+                reloadCache();
 
             getCachedPersistenceDriver().addPluginInterface(pluginInterfaceName);
             plugins.put(pluginInterfaceName, new ArrayList<String>());
@@ -95,6 +103,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
 
         if (getCachedPersistenceDriver() != null) {
 
+            if (!cacheInitialized)
+                reloadCache();
+
             getCachedPersistenceDriver().removePluginInterface(pluginInterfaceName);
             plugins.remove(pluginInterfaceName);
 
@@ -106,6 +117,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
     @Override
     public boolean existPluginInterface(String pluginInterfaceName) {
 
+        if (!cacheInitialized)
+            reloadCache();
+
         return plugins.containsKey(pluginInterfaceName);
 
     }// END Method ExistPluginInterface
@@ -116,6 +130,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
                                         String pluginImplementationAddress) {
 
         if (getCachedPersistenceDriver() != null) {
+
+            if (!cacheInitialized)
+                reloadCache();
 
             getCachedPersistenceDriver().addPluginImplementation(pluginInterfaceName, pluginImplementationAddress);
             plugins.get(pluginInterfaceName).add(pluginImplementationAddress);
@@ -131,6 +148,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
 
         if (getCachedPersistenceDriver() != null) {
 
+            if (!cacheInitialized)
+                reloadCache();
+
             getCachedPersistenceDriver().removePluginImplementation(pluginInterfaceName, pluginImplementationAddress);
             plugins.get(pluginInterfaceName).remove(pluginImplementationAddress);
 
@@ -143,6 +163,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
     public boolean existPluginImplementation(String pluginInterfaceName,
                                              String pluginImplementationAddress) {
 
+        if (!cacheInitialized)
+            reloadCache();
+
         return existPluginInterface(pluginInterfaceName) && plugins.get(pluginInterfaceName).contains(pluginImplementationAddress);
 
     }// END Method ExistPluginImplementation
@@ -151,6 +174,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
     @Override
     public Iterable<String> getPluginInterfacesNames() {
 
+        if (!cacheInitialized)
+            reloadCache();
+
         return plugins.keySet();
 
     }// END Method GetPluginImplementationsNames
@@ -158,6 +184,9 @@ public class CachePersistenceDriver implements IPersistenceDriver {
 
     @Override
     public Iterable<String> getPluginImplementationsAddresses(String pluginInterfaceName) {
+
+        if (!cacheInitialized)
+            reloadCache();
 
         return plugins.get(pluginInterfaceName);
 
