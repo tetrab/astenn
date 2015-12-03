@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.lestr.astenn.astenn-examples</groupId>
         <artifactId>embbed-xml-document</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
 
     <groupId>org.lestr.astenn.astenn-examples.embbed-xml-document</groupId>
     <artifactId>application</artifactId>
     <name>Astenn :: Examples :: Embbed XML Document :: Application</name>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
   
     <dependencies>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.lestr.astenn</groupId>
             <artifactId>astenn-core</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

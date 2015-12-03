@@ -13,7 +13,7 @@
     <artifactId>astenn</artifactId>
     <name>Astenn</name>
     <packaging>pom</packaging>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     
     <properties>
         <msbuild.executable>C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe</msbuild.executable>
@@ -35,7 +35,7 @@
         <connection>scm:git:https://github.com/tetrab/astenn.git</connection>
         <developerConnection>scm:git:http://github.com/tetrab/astenn.git</developerConnection>
         <url>https://github.com/tetrab/astenn.git</url>
-      <tag>astenn-1.0.3</tag>
+      <tag>HEAD</tag>
   </scm>
   
     <build>
