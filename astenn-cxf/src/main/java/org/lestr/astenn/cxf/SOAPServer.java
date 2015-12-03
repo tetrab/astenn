@@ -119,7 +119,7 @@ public class SOAPServer implements IServer {
 
 
     /**
-     * @param Port TCP utilisé par le serveur.
+     * @param port TCP utilisé par le serveur.
      */
     public void setPort(int port) {
 
