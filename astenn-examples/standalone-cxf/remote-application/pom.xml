@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.lestr.astenn.astenn-examples</groupId>
         <artifactId>standalone-cxf</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <groupId>org.lestr.astenn.astenn-examples.standalone-cxf</groupId>
     <artifactId>remote-application</artifactId>
     <name>Astenn :: Examples :: Standalone CXF :: Remote Application</name>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
     
     <dependencies>
@@ -20,19 +20,19 @@
         <dependency>
             <groupId>org.lestr.astenn</groupId>
             <artifactId>astenn-core</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         
         <dependency>
             <groupId>org.lestr.astenn</groupId>
             <artifactId>astenn-cxf</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         
         <dependency>
             <groupId>org.lestr.astenn.astenn-examples.standalone-cxf</groupId>
             <artifactId>api</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         
     </dependencies>
