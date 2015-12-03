@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.lestr.astenn.astenn-examples</groupId>
         <artifactId>remote-implementation</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <groupId>org.lestr.astenn.astenn-examples.remote-implementation</groupId>
     <artifactId>local-application</artifactId>
     <name>Astenn :: Examples :: Remote Implementation :: Test Application</name>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
     
     <dependencies>
@@ -20,13 +20,13 @@
         <dependency>
             <groupId>org.lestr.astenn</groupId>
             <artifactId>astenn-core</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         
         <dependency>
             <groupId>org.lestr.astenn.astenn-examples.remote-implementation</groupId>
             <artifactId>api</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         
     </dependencies>

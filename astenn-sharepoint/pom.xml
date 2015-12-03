@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.lestr</groupId>
         <artifactId>astenn</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <groupId>org.lestr.astenn</groupId>
     <artifactId>astenn-sharepoint</artifactId>
     <name>Astenn :: SharePoint</name>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <packaging>pom</packaging>
 
     <build>
@@ -28,13 +28,13 @@
                             <target>
 
                                 <exec executable="${msbuild.executable}">
-                                    <arg value="src/main/csharp/${project.artifactId}.csproj"/>
-                                    <arg value="/t:Rebuild"/>
-                                    <arg value="/p:Configuration=${msbuild.cible}"/>
+                                    <arg value="src/main/csharp/${project.artifactId}.csproj" />
+                                    <arg value="/t:Rebuild" />
+                                    <arg value="/p:Configuration=${msbuild.cible}" />
                                 </exec>
                 
                                 <copy todir="target">
-                                    <fileset dir="src/main/csharp/bin/${msbuild.cible}"/>
+                                    <fileset dir="src/main/csharp/bin/${msbuild.cible}" />
                                 </copy>
 
                             </target>
