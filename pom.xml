@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.lestr</groupId>
@@ -20,7 +20,7 @@
         <msbuild.cible>Debug</msbuild.cible>
     </properties>
     
-    <url>http://code.google.com/p/astenn</url>
+    <url>https://github.com/tetrab/astenn</url>
     <description>Astenn is a lightweight plugin system for .NET and Java applications.</description>
   
     <licenses>
@@ -32,9 +32,9 @@
     </licenses>
   
     <scm>
-        <connection>scm:svn:http://astenn.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://astenn.googlecode.com/svn/trunk</developerConnection>
-        <url>http://astenn.googlecode.com/svn/trunk</url>
+        <connection>scm:git:https://github.com/tetrab/astenn.git</connection>
+        <developerConnection>scm:git:http://github.com/tetrab/astenn.git</developerConnection>
+        <url>https://github.com/tetrab/astenn.git</url>
     </scm>
   
     <build>
@@ -42,8 +42,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
                 <configuration>
-                    <tagBase>https://astenn.googlecode.com/svn/tags</tagBase>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
                 </configuration>
             </plugin>
         </plugins>
