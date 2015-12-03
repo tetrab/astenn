@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.lestr</groupId>
         <artifactId>astenn</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
 
     <groupId>org.lestr.astenn</groupId>
     <artifactId>astenn-wcf</artifactId>
     <name>Astenn :: WCF</name>
-    <version>1.0.3</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <build>

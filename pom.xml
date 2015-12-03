@@ -13,7 +13,7 @@
     <artifactId>astenn</artifactId>
     <name>Astenn</name>
     <packaging>pom</packaging>
-    <version>1.0.3</version>
+    <version>1.0.3-SNAPSHOT</version>
     
     <properties>
         <msbuild.executable>C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe</msbuild.executable>
