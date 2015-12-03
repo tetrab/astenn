@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.lestr</groupId>
         <artifactId>astenn</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <groupId>org.lestr.astenn</groupId>
     <artifactId>astenn-cxf</artifactId>
     <name>Astenn :: CXF</name>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
   
     <dependencies>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.lestr.astenn</groupId>
             <artifactId>astenn-core</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
 
         <dependency>
